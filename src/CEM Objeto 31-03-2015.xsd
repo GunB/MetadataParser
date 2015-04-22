@@ -1,0 +1,258 @@
+<?xml version="1.0"?>
+<lom xmlns="http://ltsc.ieee.org/xsd/LOM">
+    <general>
+        <language>en</language>
+        <identifier>
+            <catalog catName="RED" catSource="http://www.mineducacion.gov.co">//RED/1P7QL0AQAR6</catalog>
+        </identifier>
+        <identifier>
+            <catalog catName="SENA" catSource="http://www.sena.edu.co">IDI-CON-OBJ-001-n1-01-01</catalog>
+        </identifier>
+        <identifier>
+            <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01ob01</catalog>
+        </identifier>
+        <title subtitle="" lang="en">Looking for a job</title>
+        <description lang="es">"Este objeto de aprendizaje "Looking for a job" que forma parte de la lección "The call-1", la cual pertenece, a su vez, al nivel ""n1"" de la enseñanza del inglés, permite al estudiante explorar el uso de las formas directas (want, can) e indirectas (would like to) dentro del contexto de búsqueda de empleo, a través de conversaciones telefónicas y entrevistas de trabajo.  En este objeto se hace una introducción a estas formas y se le permite al estudiante reconocerlas en situaciones específicas. De igual forma, se le permite al estudiante entrar en contacto con vocabulario relacionado a la búsqueda de empleo"</description>
+        <keyword lang="en">
+            <li>Would like to</li>
+            <li>want</li>
+            <li>can</li>
+            <li>direct and indirect requests</li>
+        </keyword>
+        <structure schema="CEM">Árbol</structure>
+        <aggregationLevel schema="CEM">Alto</aggregationLevel>
+    </general>
+    <lifeCycle>
+        <version date="28-01-2015">1.0</version>
+        <status>Publicado</status>
+        <contribute>
+            <role schema="CEM">Autor</role>
+            <entity entityForm="467661159" type="Persona" src="dherrera@edistribution.co" institution=" eDistribution SAS" country="CO">Diana Herrera</entity>
+            <date>02-03-2015</date>
+        </contribute>
+        <contribute>
+            <role schema="CEM">Autor</role>
+            <entity entityForm="467661159" type="Persona" src="dpuentes@edistribution.co" institution=" eDistribution SAS" country="CO">Kelly Dianne Puentes Velasco</entity>
+            <date>05-03-2015</date>
+        </contribute>
+        <contribute>
+            <role schema="CEM">Autor</role>
+            <entity entityForm="467661159" type="Persona" src="hgalvis@edistribution.co" institution=" eDistribution SAS" country="CO">Hector Alejandro Galvis Guerrero</entity>
+            <date>02-02-2015</date>
+        </contribute>
+        <contribute>
+            <role schema="CEM">Diseñador Instruccional</role>
+            <entity entityForm="4654789" type="Persona" src="mreyes@edistribution.co" institution=" eDistribution SAS" country="CO">Myriam Cecilia Reyes Coral</entity>
+            <date>02-02-2015</date>
+        </contribute>
+        <contribute>
+            <entity entityForm="4654459" type="Persona" src="ediaz@edistribution.co" institution=" eDistribution SAS" country="CO">Emanuel Fernando Diaz Palencia</entity>
+            <date>02-02-2015</date>
+        </contribute>
+        <contribute>
+            <role schema="CEM">Diseñador Instruccional</role>
+            <entity entityForm="4604459" type="Persona" src="arodriguez@edistribution.co" institution=" eDistribution SAS" country="CO">Ana Vela Rodriguez Velasquez</entity>
+            <date>02-02-2015</date>
+        </contribute>
+        <contribute>
+            <role schema="CEM">Experto pedagógico</role>
+            <entity entityForm="465441159" type="Persona" src="ncarrillo@edistribution.co" institution=" eDistribution SAS" country="CO">Nancy Carrillo Mora</entity>
+            <date>02-02-2015</date>
+        </contribute>
+        <contribute>
+            <role schema="CEM">Experto pedagógico</role>
+            <entity entityForm="466661159" type="Persona" src="arodriguezp@edistribution.co" institution=" eDistribution SAS" country="CO">Adriana Rodríguez Pulido</entity>
+            <date>02-02-2015</date>
+        </contribute>
+        <contribute>
+            <role schema="CEM">Experto pedagógico</role>
+            <entity entityForm="467661159" type="Persona" src="abeltran@edistribution.co" institution=" eDistribution SAS" country="CO">Alba Lucía Beltrán Poveda</entity>
+            <date>02-02-2015</date>
+        </contribute>
+    </lifeCycle>
+    <metaMetadata>
+        <identifier>
+            <catalog catName="RED" catSource="//RED/1P7QL0AQAR6">RED/1P7QL0AQAR6_META</catalog>
+        </identifier>
+        <identifier>
+            <catalog catName="SENA" catSource="//SENA/1P7QL0AQAR6">IDI-CON-OBJ-001-n1-01-01_META</catalog>
+        </identifier>
+        <identifier>
+            <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01ob01_META</catalog>
+        </identifier>
+        <contribute>
+            <role schema="DC">Validador</role>
+            <entity entityForm="467661159" type="Persona" src="mduran@edistribution.co" institution=" eDistribution SAS" country="CO">Mauricio Durán</entity>
+            <date>02-02-2015</date>
+        </contribute>
+        <contribute>
+            <role schema="DC">Catalogador</role>
+            <entity entityForm="467661159" type="Persona" src="czuniga@edistribution.co" institution="eDistribution SAS" country="CO">Cristian Camilo Zuñiga</entity>
+            <date>02-02-2015</date>
+        </contribute>
+        <metadataSchema>CEM 2.0</metadataSchema>
+        <language>es</language>
+    </metaMetadata>
+    <technical>
+        <format codec="ZIP64" extension=".zip">application/zip/</format>
+        <size>140MB</size>
+        <location src="//red.myrepo.sena.edu.co/datared/en" storage="http://www.sena.edu.co">http://RI_SENA.edu.co/reda/HS4UI2</location>
+        <requirement>
+            <orComposite>
+                <type>Software</type>
+                <name>Google Chrome</name>
+                <minimumVersion> 32.0.1700</minimumVersion>
+                <maximumVersion>35.0.1916.153 m</maximumVersion>
+            </orComposite>
+            <orComposite>
+                <type>Software</type>
+                <name>Mozilla Firefox</name>
+                <minimumVersion>10.0.7esr</minimumVersion>
+                <maximumVersion> 30.0</maximumVersion>
+            </orComposite>
+            <orComposite>
+                <type>Software</type>
+                <name>Internet Explorer</name>
+                <minimumVersion>11.0.9600.16428</minimumVersion>
+                <maximumVersion>11.0.9600.17107</maximumVersion>
+            </orComposite>
+        </requirement>
+        <accessibility>
+            <subtittled lang="en">false</subtittled>
+            <audioDescription lang="ab">false</audioDescription>
+            <signLanguage>false</signLanguage>
+            <textBrowser>false</textBrowser>
+            <changeSizeOfLetter>false</changeSizeOfLetter>
+            <changeColorAndContrast>false</changeColorAndContrast>
+        </accessibility>
+        <image type="" fileName="" src="" size=""/>
+    </technical>
+    <educational>
+        <interactivityType schema="LOM">Mixta</interactivityType>
+        <resourceType schema="CEM 2.0">
+            <levelOne value="Recurso educativo digital">
+                <levelTwo levelThree="Objeto de aprendizaje=" levelFour="" levelFive=""/>
+            </levelOne>
+            <leveltwo value="Granularidad">
+                <levelTwo levelThree="Objeto de aprendizaje=" levelFour="" levelFive=""/>
+            </leveltwo>
+            <leveltwo value="Información">
+                <levelTwo levelThree="Software=" levelFour=" Juegos educativos" levelFive=""/>
+            </leveltwo>
+            <leveltwo value="Intensionalidad didactica">
+                <levelTwo levelThree="Guía=" levelFour="" levelFive=""/>
+            </leveltwo>
+            <leveltwo value="Intensionalidad pedagógica">
+                <levelTwo levelThree="Conceptuales=" levelFour="" levelFive=""/>
+            </leveltwo>
+        </resourceType>
+        <interactivityLevel schema="LOM">Alto</interactivityLevel>
+        <semanticDensity schema="LOM">Alta</semanticDensity>
+        <intentedEndUserRole schema="MEN" populationGroup="Todas">Estudiante de Educación Superior</intentedEndUserRole>
+        <context subLevel="Técnica Profesional" educativeLevel=" Educación Superior" gradeGroup="" schema="MEN">String</context>
+        <context subLevel="Educación Superior" educativeLevel="Tecnológica" gradeGroup="" schema="MEN">String</context>
+        <typicalAgeRange ageTo="99" ageFrom="15"/>
+        <difficulty schema="LOM">Alta</difficulty>
+        <typicalLearningTime>25 MIN</typicalLearningTime>
+        <description>
+            <recommendedUse lang="es">Este objeto se puede combinar con lecciones que tengan que ver con la búsqueda de empleo, llamadas telefónicas para entrevistas de trabajo y entrevistas de trabajo. También se pueden extraer datos culturales sobre cómo se lleva a cabo la búsqueda de empleo en otros contextos mundiales. El estudiante también puede acceder a este objeto e interactuar con actividades de vocabulario que le permitan reforzar específicamente palabras relacionadas a esta temática. </recommendedUse>
+            <triggerQuestion lang="es">La pregunta detonante se basa en la situación de buscar trabajo. Contextualizada en el contexto Colombiano </triggerQuestion>
+            <pedagogicalAspect lang="es">La información de las funciones gramaticales directas e indirectas se presenta dentro del contexto de búsqueda de empleo. Como valor agregado, este objeto incluye referencias culturales respecto a la búsqueda de trabajo en otros países. Los estudiantes también son expuestos al vocabulario relacionado a las llamadas telefónicas. Este objeto incluye una simulación donde el estudiante debe llevar a cabo una conversación telefónica que al responderse erróneamente se cuelga.</pedagogicalAspect>
+            <learningGoal lang="es">"Este objeto tiene como propósito principal contextualizar al estudiante en situaciones donde se utilizan las formas gramaticales would like to, want y can para ser directo e indirecto de manera oral en inglés. Se pretende que el estudiante pueda familiarizarse con estas formas y a su vez pueda producirlas oralmente para las funciones específicas de formular y responder a peticiones directas e indirectas. El público objetivo son los estudiantes del nivel n1" </learningGoal>
+        </description>
+    </educational>
+    <rights>
+        <cost currency="COP">0</cost>
+        <copyrightsAndOtherRestrictions rightsHolder="Servicio Nacional de Aprendizaje SENA" scope="CO" providerCountry="CO" type="Institucion" license="CC BY-NC-ND" lang="es" src="http://creativecommons.org/licenses/by-nc-nd/2.5/co/" year="2014" version="2.5 Colombia">a</copyrightsAndOtherRestrictions>
+        <permission periodTo="Indefinido" copy="true" edit="false" download="false" view="true" print="true" periodFrom="2014"/>
+    </rights>
+    <relation>
+        <kind schema="CEM ">Es parte de</kind>
+        <resource>
+            <identifier>
+                <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01</catalog>
+            </identifier>
+            <description lang="ab">"En esta lección "The Call-1" la cual pertenece al nivel "n1" de la enseñanza del inglés, compuesta por 12 objetos de aprendizaje, se encuentran los siguientes  resultados de aprendizaje: - Exchange basic personal information  Accurately use basic information in simple situations. Identify necessary improvemnet task related to exchange of basic information an daily activities. Por otra parte, la función  comunicativa desarrollada es: Introduce yourself and ask people’s names. En cuanto a la gramática, se desarrolla: el present tense of the verb to be (Am, is, are);  El vocabulario trata de personal information. La pronunciación es acerca de letters of the alphabet and word stress. Finalmente, y en cuanto a los aspectos culturales, se desarrolla et tema: grettings in different cultures. De acuerdo con el Marco Común Europeo de Referencia para Enseñanza de Lenguas. Al final de la lección se encuentra una evaluación de la lección. (Lesson Test)."</description>
+        </resource>
+    </relation>
+    <relation>
+        <kind schema="CEM ">Esta compuesto por</kind>
+        <resource>
+            <identifier>
+                <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01ob01re1</catalog>
+            </identifier>
+            <description lang="ab">"Este recurso educativo digital "Let´s starts" que es parte del objeto de aprendizaje "Looking for a job", que a su vez pertenece a la lección ""The Call-1"" y pertenece al subnivel ""n1"" de la enseñanza del inglés, trae información de contextualización sobre el tema. Inicialmente muestra un collage en el cual aparecen cuatro fotos, donde se evidencian personas buscando trabajo, clasificados del periódico y nombres de plataformas  virtuales de empleo. También trae información sobre los aprendizajes esperados y el objetivo. Adicionalmente trae una actividad para hacer en el aula de clase con los compañeros,  la cual consiste en comentar acerca de las posibilidades, formas y experiencias en la búsqueda de empleo."</description>
+        </resource>
+    </relation>
+    <relation>
+        <kind schema="CEM ">Esta compuesto por</kind>
+        <resource>
+            <identifier>
+                <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01ob01re2</catalog>
+            </identifier>
+            <description lang="ab">"Este recurso educativo digital "Let´s explore" que es parte del objeto de aprendizaje "Looking for a job", que a su vez pertenece a la lección ""The Call-1"" y pertenece al subnivel ""n1"" de la enseñanza del inglés, trae información exploratoria acerca del tema, inicialmente muestra una imagen asociada a una  conversación telefónica acerca de aplicar a un empleo."</description>
+        </resource>
+    </relation>
+    <relation>
+        <kind schema="CEM ">Esta compuesto por</kind>
+        <resource>
+            <identifier>
+                <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01ob01re3</catalog>
+            </identifier>
+            <description lang="ab">"Este recurso educativo digital "Let´s practice" que es parte del objeto de aprendizaje "Looking for a job", que a su vez pertenece a la lección ""The Call-1"" y pertenece al subnivel ""n1"" de la enseñanza del inglés, trae instrucciones y la una actividad donde el estudiante debe arrastrar cada palabra a su campo correspondiente.  (Drag and drop)  dentro de una conversación típica obtener una entrevista de trabajo."</description>
+        </resource>
+    </relation>
+    <relation>
+        <kind schema="CEM ">Esta compuesto por</kind>
+        <resource>
+            <identifier>
+                <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01ob01re4</catalog>
+            </identifier>
+            <description lang="ab">"Este recurso educativo digital "Let´s practice" que es parte del objeto de aprendizaje ""Looking for a job"", que a su vez pertenece a la lección ""The Call-1"" y pertenece al subnivel ""n1"" de la enseñanza del inglés, trae instrucciones y la una actividad donde el estudiante debe arrastrar cada palabra a su campo correspondiente.  (Drag and drop)  dentro de una conversación típica obtener una entrevista de trabajo."</description>
+        </resource>
+    </relation>
+    <relation>
+        <kind schema="CEM ">Esta compuesto por</kind>
+        <resource>
+            <identifier>
+                <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01ob01re5</catalog>
+            </identifier>
+            <description lang="ab">"Este recurso educativo digital "Let´s practice" que es parte del objeto de aprendizaje "Looking for a job", que a su vez pertenece a la lección ""The Call-1"" y pertenece al subnivel ""n1"" de la enseñanza del inglés, trae y una actividad para realizar una sopa de letras con vocabulario acerca de la búsqueda de empleo;   y una retroalimentación, cuando el estudiante complete la dicha sopa de manera correcta o incorrecta"</description>
+        </resource>
+    </relation>
+    <relation>
+        <kind schema="CEM ">Esta compuesto por</kind>
+        <resource>
+            <identifier>
+                <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01ob01re6</catalog>
+            </identifier>
+            <description lang="ab">"Este recurso educativo digital "Check your progress" que es parte del objeto de aprendizaje "Looking for a job", que a su vez pertenece a la lección ""The Call-1"" y pertenece al subnivel ""n1"" de la enseñanza del inglés, trae un cuestionario de preguntas de opción multiple con única respuesta"</description>
+        </resource>
+    </relation>
+    <relation>
+        <kind schema="CEM ">Esta compuesto por</kind>
+        <resource>
+            <identifier>
+                <catalog catName="edistribution" catSource="http://www.edistribution.co/">engenn1le01ob01re7</catalog>
+            </identifier>
+            <description lang="ab">"Este recurso educativo digital "Take away" que es parte del objeto de aprendizaje "Looking for a job", que a su vez pertenece a la lección ""The Call-1"" y pertenece al subnivel ""n1"" de la enseñanza del inglés, trae un archivo .PDF descargable que contiene el material imprimible relacionado con el contenido de todo el objeto, con actividades adaptadas para ser resueltas de manera escrita."</description>
+        </resource>
+    </relation>
+    <classification>
+        <purpose lang="es">El propósito de clasificar este Objeto de aprendizaje es facilitar su acceso y recuperación partiendo del área de conocimiento a la que pertenece.</purpose>
+        <taxonPath schema="MEN">
+            <levelOne value="Núcleos básicos de conocimiento">
+                <levelTwo levelThree="Lenguas modernas, Literatura, Lingüística y afines">Ciencias sociales y humanas</levelTwo>
+            </levelOne>
+        </taxonPath>
+        <taxonPath schema="Dewey">
+            <levelOne value="400">
+                <levelTwo levelThree="420">Inglés e inglés antiguo</levelTwo>
+            </levelOne>
+        </taxonPath>
+        <description lang="ab">String</description>
+        <keyword lang="es">
+            <li>Inglés</li>
+        </keyword>
+    </classification>
+</lom>
