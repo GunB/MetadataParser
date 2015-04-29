@@ -1,10 +1,13 @@
 package bin;
 
+import com.google.common.base.Joiner;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -19,12 +22,21 @@ public class ExcelReader {
     private Object objSheet = null;
     private ArrayList<String> arrSheetNames = null;
 
-    public ExcelReader(String strUri) {
+    public ExcelReader(String strUri) throws IOException {
         this.strUri = strUri;
         ReadFile();
+        getArrSheetNames();
     }
 
-    public ArrayList<String> getArrSheetNames() {
+    public Object getObjSheet() {
+        return objSheet;
+    }
+
+    public void setObjSheet(Object objSheet) {
+        this.objSheet = objSheet;
+    }
+
+    private ArrayList<String> getArrSheetNames() {
         arrSheetNames = new ArrayList<>();
         Iterator<XSSFSheet> iteSheet = xssActualBook.iterator();
 
@@ -45,41 +57,57 @@ public class ExcelReader {
         return xssActualSheet;
     }
 
-    public Object turnSheetToObject() {
+    public static HashMap turnSheetToObject(XSSFSheet xssSheet) {
+        HashMap<String, String> objSheet = new HashMap();
         //Iterate through each rows one by one
-        Iterator<Row> rowIterator = this.xssActualSheet.iterator();
+        Iterator<Row> rowIterator = xssSheet.iterator();
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
             //For each row, iterate through all the columns
             Iterator<Cell> cellIterator = row.cellIterator();
+            int position = 0;
+
+            String objKey = "";
+            ArrayList<String> objValue = new ArrayList();
 
             while (cellIterator.hasNext()) {
+
+                String objTemp = "";
                 Cell cell = cellIterator.next();
                 //Check the cell type and format accordingly
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_NUMERIC:
-                        System.out.print(cell.getNumericCellValue() + "\t");
+                        objTemp = cell.getNumericCellValue() + "";
                         break;
                     case Cell.CELL_TYPE_STRING:
-                        System.out.print(cell.getStringCellValue() + "\t");
+                        objTemp = cell.getStringCellValue();
                         break;
                 }
+
+                if (cell.getColumnIndex() == 0) {
+                    objKey = objTemp;
+                } else {
+                    objValue.add(objTemp);
+                }
+
+                position++;
             }
-            System.out.println("");
+
+            if (!objKey.isEmpty() && !objValue.isEmpty()) {
+                objSheet.put(objKey, Joiner.on(" ").join(objValue));
+            }
+
+            //System.out.println("");
         }
 
-        return this.objSheet;
+        return objSheet;
     }
 
-    private void ReadFile() {
-        try {
-            FileInputStream file = new FileInputStream(new File(this.strUri));
-            //Create Workbook instance holding reference to .xlsx file
-            this.xssActualBook = new XSSFWorkbook(file);
-            file.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void ReadFile() throws FileNotFoundException, IOException {
+        FileInputStream file = new FileInputStream(new File(this.strUri));
+        //Create Workbook instance holding reference to .xlsx file
+        this.xssActualBook = new XSSFWorkbook(file);
+        file.close();
         //return this.xssActualBook;
     }
 

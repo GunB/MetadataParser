@@ -1,6 +1,5 @@
 package utiility;
 
-import com.sun.awt.AWTUtilities;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -31,7 +30,7 @@ public final class AccionesVentana {
     }
 
     public void VentanaTransparente(JFrame ventana) {
-        AWTUtilities.setWindowOpaque(ventana, false);
+        //AWTUtilities.setWindowOpaque(ventana, false);
     }
 
     public void MouseDragged(JFrame ventana, MouseEvent evt) {
@@ -79,6 +78,7 @@ public final class AccionesVentana {
         ventana.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/img/favico.png")));
         CentrarVentana(ventana);
         ventana.setTitle(Titulo);
+        ventana.setMinimumSize(ventana.getSize());
         //
     }
 }
