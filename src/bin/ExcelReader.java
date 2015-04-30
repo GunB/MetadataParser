@@ -20,7 +20,9 @@ public class ExcelReader {
     private XSSFSheet xssActualSheet = null;
     private XSSFWorkbook xssActualBook = null;
     private Object objSheet = null;
-    private ArrayList<String> arrSheetNames = null;
+    public ArrayList<String> arrSheetNames = null;
+    
+    
 
     public ExcelReader(String strUri) throws IOException {
         this.strUri = strUri;
@@ -36,14 +38,14 @@ public class ExcelReader {
         this.objSheet = objSheet;
     }
 
-    private ArrayList<String> getArrSheetNames() {
+    public ArrayList<String> getArrSheetNames() {
         arrSheetNames = new ArrayList<>();
         Iterator<XSSFSheet> iteSheet = xssActualBook.iterator();
 
         while (iteSheet.hasNext()) {
             XSSFSheet tempSheet = iteSheet.next();
             this.arrSheetNames.add(tempSheet.getSheetName());
-            System.out.println(tempSheet.getSheetName());
+            //System.out.println(tempSheet.getSheetName());
         }
 
         return this.arrSheetNames;

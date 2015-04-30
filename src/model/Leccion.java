@@ -10,16 +10,19 @@ package model;
  * @author hangarita
  */
 public class Leccion {
+
     String strNombre;
     String strID;
     String strDesc;
-    
+
     Objeto objObjeto;
 
     public Leccion(String strNombre, String strID, String strDesc) {
         this.strNombre = strNombre;
         this.strID = strID;
         this.strDesc = strDesc;
+
+        System.out.println(this.getClass() + ": " + strNombre + "\t" + strID + "\t" + strDesc);
     }
 
     public String getStrNombre() {
@@ -53,6 +56,5 @@ public class Leccion {
     public void setObjObjeto(Objeto objObjeto) {
         this.objObjeto = objObjeto;
     }
-    
-    
+
 }

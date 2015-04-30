@@ -24,7 +24,6 @@ import utiility.AccionesVentana;
 public class Index extends javax.swing.JFrame {
 
     AccionesVentana nuevo;
-    Object objConfig;
     MetadataParser mParser = new MetadataParser();
 
     /**
@@ -36,7 +35,7 @@ public class Index extends javax.swing.JFrame {
         nuevo = new AccionesVentana(this, "XML Data Generator");
         
         try {
-            objConfig = mParser.ReadingConfig();
+            mParser.ReadingConfig();
         } catch (IOException | ParseException ex) {
             Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Config file is broken or missing","ERROR",JOptionPane.ERROR_MESSAGE);

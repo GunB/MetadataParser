@@ -6,24 +6,28 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
  * @author hangarita
  */
 public class Objeto {
+
     String strNombre;
-    String sttrID;
+    String strID;
     String strDesc;
-    
-    ArrayList<String> arrData = new ArrayList<>();
-    
+
+    HashMap<String, String> arrData = new HashMap<>();
+
     ArrayList<Recurso> arrRecursos;
 
-    public Objeto(String strNombre, String sttrID, String strDesc) {
+    public Objeto(String strNombre, String strID, String strDesc) {
         this.strNombre = strNombre;
-        this.sttrID = sttrID;
+        this.strID = strID;
         this.strDesc = strDesc;
+
+        System.out.println(this.getClass() + ": " + strNombre + "\t" + strID + "\t" + strDesc);
     }
 
     public String getStrNombre() {
@@ -34,12 +38,12 @@ public class Objeto {
         this.strNombre = strNombre;
     }
 
-    public String getSttrID() {
-        return sttrID;
+    public String getStrID() {
+        return strID;
     }
 
-    public void setSttrID(String sttrID) {
-        this.sttrID = sttrID;
+    public void setStrID(String sttrID) {
+        this.strID = sttrID;
     }
 
     public String getStrDesc() {
@@ -50,11 +54,11 @@ public class Objeto {
         this.strDesc = strDesc;
     }
 
-    public ArrayList<String> getArrData() {
+    public HashMap<String, String> getArrData() {
         return arrData;
     }
 
-    public void setArrData(ArrayList<String> arrData) {
+    public void setArrData(HashMap<String, String> arrData) {
         this.arrData = arrData;
     }
 
@@ -65,6 +69,5 @@ public class Objeto {
     public void setArrRecursos(ArrayList<Recurso> arrRecursos) {
         this.arrRecursos = arrRecursos;
     }
-    
-    
+
 }

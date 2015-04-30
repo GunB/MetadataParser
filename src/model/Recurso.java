@@ -6,6 +6,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -14,15 +15,22 @@ import java.util.ArrayList;
 public class Recurso {
     
     String strNombre;
-    String sttrID;
+    String strID;
     String strDesc;
     
-    ArrayList<String> arrData = new ArrayList<>();
+    HashMap<String, String> arrData = new HashMap<>();
+    
+    HashMap<String,String> arrXML = new HashMap<>();
 
-    public Recurso(String strNombre, String sttrID, String strDesc) {
+    public Recurso(String strNombre, String strID, String strDesc) {
         this.strNombre = strNombre;
-        this.sttrID = sttrID;
+        this.strID = strID;
         this.strDesc = strDesc;
+        System.out.println(this.getClass() + ": " + strNombre + "\t" + strID + "\t" + strDesc);
+    }
+    
+    private void xmlBaseData(){
+        //arrXML.put("", strID);
     }
 
     public String getStrNombre() {
@@ -33,12 +41,12 @@ public class Recurso {
         this.strNombre = strNombre;
     }
 
-    public String getSttrID() {
-        return sttrID;
+    public String getStrID() {
+        return strID;
     }
 
-    public void setSttrID(String sttrID) {
-        this.sttrID = sttrID;
+    public void setStrID(String sttrID) {
+        this.strID = sttrID;
     }
 
     public String getStrDesc() {
@@ -49,14 +57,12 @@ public class Recurso {
         this.strDesc = strDesc;
     }
 
-    public ArrayList<String> getArrData() {
+    public HashMap<String, String> getArrData() {
         return arrData;
     }
 
-    public void setArrData(ArrayList<String> arrData) {
+    public void setArrData(HashMap<String, String> arrData) {
         this.arrData = arrData;
     }
-    
-    
     
 }
