@@ -28,10 +28,6 @@ public class Recurso {
         this.strDesc = strDesc;
         System.out.println(this.getClass() + ": " + strNombre + "\t" + strID + "\t" + strDesc);
     }
-    
-    private void xmlBaseData(){
-        //arrXML.put("", strID);
-    }
 
     public String getStrNombre() {
         return strNombre;

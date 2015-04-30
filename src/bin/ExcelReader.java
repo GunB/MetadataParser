@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -85,6 +86,8 @@ public class ExcelReader {
                         objTemp = cell.getStringCellValue();
                         break;
                 }
+                
+                //objTemp = Charset.forName("ISO-8859-1").encode(objTemp).toString();
 
                 if (cell.getColumnIndex() == 0) {
                     objKey = objTemp;
@@ -152,7 +155,7 @@ public class ExcelReader {
                             break;
                     }
                 }
-                System.out.println("");
+                //System.out.println("");
             }
             file.close();
         } catch (Exception e) {

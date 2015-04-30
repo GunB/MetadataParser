@@ -14,7 +14,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.json.simple.parser.ParseException;
+import org.xml.sax.SAXException;
 import utiility.AccionesVentana;
 
 /**
@@ -41,6 +44,22 @@ public class Index extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Config file is broken or missing","ERROR",JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
+        
+        try {
+            mParser.ReadMetadataBase();
+        } catch (ParserConfigurationException | SAXException | TransformerException | IOException ex) {
+            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Metadata Base is Broken or Missing","ERROR",JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+        
+        try {
+            txtSearch.setText(System.getProperty("user.dir").concat("\\formato metadatos.xlsx"));
+            mParser.ReadObject(txtSearch.getText());
+        } catch (IOException ex) {
+            txtSearch.setText("");
+        }
+        
     }
 
     /**
@@ -273,7 +292,7 @@ public class Index extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchMetaActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        // TODO add your handling code here:
+        mParser.CreateXMLFull();
     }//GEN-LAST:event_btnCreateActionPerformed
 
     /**
