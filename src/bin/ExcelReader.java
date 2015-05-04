@@ -87,6 +87,8 @@ public final class ExcelReader {
                 }
                 
                 //objTemp = Charset.forName("ISO-8859-1").encode(objTemp).toString();
+                
+                objTemp = objTemp.trim();
 
                 if (cell.getColumnIndex() == 0) {
                     objKey = objTemp;

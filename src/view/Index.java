@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -37,37 +36,32 @@ public class Index extends javax.swing.JFrame {
         AccionesVentana.LooknFeel();
         initComponents();
         nuevo = new AccionesVentana(this, "XML Data Generator");
-        
+
         try {
             mParser.ReadingConfig();
         } catch (IOException | ParseException ex) {
             Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Config file is broken or missing","ERROR",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Config file is broken or missing", "ERROR", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
-        
+
         try {
             mParser.ReadMetadataBase();
         } catch (ParserConfigurationException | SAXException | TransformerException | IOException ex) {
             Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Metadata Base is Broken or Missing","ERROR",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Metadata Base is Broken or Missing", "ERROR", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
-        
+
         try {
-            txtSearch.setText(System.getProperty("user.dir").concat("\\formato metadatos.xlsx"));
+            txtSearch.setText(System.getProperty("user.dir").concat(File.separator + "formato metadatos.xlsx"));
             mParser.ReadObject(txtSearch.getText());
         } catch (IOException ex) {
             txtSearch.setText("");
         }
-        
-        try {
-            txtXmlData.setText(System.getProperty("user.dir").concat("\\Generated_metadata"));
-            FileOptions.listFilesForFolder(new File(txtXmlData.getText()));
-        } catch (NullPointerException ex) {
-            txtXmlData.setText("");
-        }
-        
+
+        txtXmlData.setText(System.getProperty("user.dir").concat(File.separator + "Generated_metadata"));
+
     }
 
     /**
@@ -238,11 +232,11 @@ public class Index extends javax.swing.JFrame {
 
     private void btnSearchMetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchMetaActionPerformed
         JFileChooser chooser = new JFileChooser();
-        
+
         chooser.setCurrentDirectory(new java.io.File("."));
         //chooser.setDialogTitle(choosertitle);
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-    //
+        //
         // disable the "All files" option.
         //
         chooser.setAcceptAllFileFilterUsed(false);
@@ -255,7 +249,7 @@ public class Index extends javax.swing.JFrame {
         } else {
             System.out.println("No Selection ");
         }
-        
+
         try {
             txtXmlData.setText(chooser.getSelectedFile().getAbsolutePath());
         } catch (Exception e) {
@@ -264,11 +258,13 @@ public class Index extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchMetaActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+
         try {
-            mParser.CreateXMLFull();
-        } catch (TransformerException ex) {
+            mParser.CreateXMLFull(txtXmlData.getText());
+        } catch (TransformerException | IOException ex) {
             Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_btnCreateActionPerformed
 
     /**
@@ -291,7 +287,7 @@ public class Index extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Index.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */

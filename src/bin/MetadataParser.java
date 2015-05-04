@@ -5,6 +5,8 @@
  */
 package bin;
 
+import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
+import com.sun.org.apache.xerces.internal.dom.NodeImpl;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -28,11 +30,11 @@ import javax.xml.transform.stream.StreamResult;
 import model.Leccion;
 import model.Objeto;
 import model.Recurso;
+import model.XMLTag;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -46,7 +48,9 @@ public class MetadataParser {
     ExcelReader xlsRead;
     HashMap<String, HashMap> jConfig;
     public Leccion lecData;
-    public Document xmlMetaBase;
+    private Document xmlMetaBase = null;
+
+    public Document xmlMetaActual;
     File fXmlFile;
 
     public void ReadingConfig() throws IOException, ParseException {
@@ -58,60 +62,99 @@ public class MetadataParser {
     }
 
     public void ReadMetadataBase() throws ParserConfigurationException, SAXException, IOException, TransformerException {
-        String strUrl = System.getProperty("user.dir").concat("\\metadata.xml");
-        System.out.println(strUrl);
-        fXmlFile = new File(strUrl);
+        if (xmlMetaBase == null) {
 
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        Document doc = dBuilder.parse(fXmlFile);
+            String strUrl = System.getProperty("user.dir").concat(File.separator + "metadata.xml");
+            System.out.println(strUrl);
+            fXmlFile = new File(strUrl);
 
-        //optional, but recommended
-        //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
-        doc.getDocumentElement().normalize();
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
 
-        System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+            //optional, but recommended
+            //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+            doc.getDocumentElement().normalize();
+
+            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
         //this.jConfig = new Gson().fromJson(new FileReader(f).toString(), HashMap.class);
-        //System.out.println(jObject);
+            //System.out.println(jObject);
 
-        //printDocument(doc, System.out);
-        xmlMetaBase = doc;
+            //printDocument(doc, System.out);
+            xmlMetaBase = doc;
+        }
+        xmlMetaActual = xmlMetaBase;
     }
 
-    public void CreateXMLFull() throws TransformerException {
-        CreateFullXMLObjeto();
+    public void CreateXMLFull(String strPath) throws TransformerException, IOException, ParserConfigurationException, SAXException {
+        ReadMetadataBase();
+        CreateFullXMLObjeto(strPath, lecData.getObjObjeto());
+        
+        Iterator<Recurso> arrRecData = lecData.getObjObjeto().getArrRecursos().iterator();
+        
+        while(arrRecData.hasNext()){
+            Recurso recData = arrRecData.next();
+            ReadMetadataBase();
+            CreateFullXMLRecurso(strPath, recData);
+        }
+        
     }
 
-    public void CreateFullXMLObjeto() throws TransformerException {
-        /*try {
-         printDocument(xmlMetaBase, System.out);
-         } catch (IOException | TransformerException ex) {
-         Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
-         }//*/
-
-        // Get the staff element by tag name directly
-        Node staff = xmlMetaBase.getElementsByTagName("lom").item(0);
+    public void CreateFullXMLObjeto(String strPath, Objeto objObjeto) throws TransformerException, TransformerConfigurationException, IOException {
+        Node staff = xmlMetaActual.getElementsByTagName("lom").item(0);
         NodeList list = staff.getChildNodes();
 
-        Objeto objObjeto = lecData.getObjObjeto();
-
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "title")), objObjeto.getStrID());
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "title")), objObjeto.getStrNombre());
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "description")), objObjeto.getStrDesc());
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "identifier", "catalog")), objObjeto.getArrData().get("keyWord"));
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "identifier", "catalog")), objObjeto.getStrID());
+
+        String[] arrKeyWords = objObjeto.getArrData().get("keyWord").split(",");
+        list = AddNodeList2Node(list, new ArrayList<>(Arrays.asList("general", "keyword")), arrKeyWords, new XMLTag("li"));
+        
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "learningGoal")), objObjeto.getArrData().get("learningGoal"));
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "triggerQuestion")), objObjeto.getArrData().get("triggerQuestion"));
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "pedagogicalAspect")), objObjeto.getArrData().get("pedagogicalAspect"));
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "recommendedUse")), objObjeto.getArrData().get("recommendedUse"));
 
         // write the content into xml file
         lecData.setObjObjeto(objObjeto);
+        SaveChangesXML(strPath + File.separator + objObjeto.getStrID() + File.separator + "metadata.xml");
+    }
+    
+    public void CreateFullXMLRecurso(String strPath, Recurso recData) throws TransformerException, TransformerConfigurationException, IOException{
+        Node staff = xmlMetaActual.getElementsByTagName("lom").item(0);
+        NodeList list = staff.getChildNodes();
 
-        //xmlMetaBase.appendChild(node);
-        //pruebaPrint();
-        //*/
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "title")), recData.getStrNombre());
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "description")), recData.getStrDesc());
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "identifier", "catalog")), recData.getStrID());
+
+        String[] arrKeyWords = recData.getArrData().get("keyWord").split(",");
+        list = AddNodeList2Node(list, new ArrayList<>(Arrays.asList("general", "keyword")), arrKeyWords, new XMLTag("li"));
+        
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "learningGoal")), recData.getArrData().get("learningGoal"));
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "triggerQuestion")), recData.getArrData().get("triggerQuestion"));
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "pedagogicalAspect")), recData.getArrData().get("pedagogicalAspect"));
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "recommendedUse")), recData.getArrData().get("recommendedUse"));
+
+        // write the content into xml file
+        //lecData.setObjObjeto(recData);
+        SaveChangesXML(strPath + File.separator + recData.getStrID() + File.separator + "metadata.xml");
     }
 
-    public void SaveChangesXML() throws TransformerConfigurationException, TransformerException {
+    public void SaveChangesXML(String strPath) throws TransformerConfigurationException, TransformerException, IOException {
+        String path = strPath;
+
+        //(use relative path for Unix systems)
+        File f = new File(path);
+        //(works for both Windows and Linux)
+        f.getParentFile().mkdirs();
+        f.createNewFile();
+
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(xmlMetaBase);
-        StreamResult result = new StreamResult(fXmlFile);
+        DOMSource source = new DOMSource(xmlMetaActual);
+        StreamResult result = new StreamResult(f);
         transformer.transform(source, result);
     }
 
@@ -121,6 +164,47 @@ public class MetadataParser {
         } catch (IOException | TransformerException ex) {
             Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private NodeList AddNodeList2Node(NodeList listNode, ArrayList<String> arrStrCompare, String[] arrNewData, XMLTag xmlTag) {
+
+        ArrayList<String> arrTempList = arrStrCompare;
+        Iterator<String> iterator = arrTempList.iterator();
+
+        while (iterator.hasNext()) {
+            String strCompare = iterator.next();
+            iterator.remove();
+
+            for (int i = 0; i < listNode.getLength(); i++) {
+                Node node = listNode.item(i);
+                // get the salary element, and update the value
+
+                //System.out.println(node.getNodeName() + " " + strCompare);
+                if (strCompare.equals(node.getNodeName())) {
+
+                    if (iterator.hasNext()) {
+                        node = AddNodeList2Node(node.getChildNodes(), arrTempList, arrNewData, xmlTag).item(0);
+                    } else {
+
+                        for (String s : arrNewData) {
+                            s = s.trim();
+                            
+                            if (!s.isEmpty()) {
+                                Node item = xmlMetaActual.createElement(xmlTag.getStrName());
+                                item.appendChild(xmlMetaActual.createTextNode(s));
+                                node.appendChild(item);
+                            }
+                        }
+                        //node.setTextContent(strNewValue);
+                    }
+
+                    break;
+                }
+            }
+
+        }
+
+        return listNode;
     }
 
     private NodeList ChangeNode(NodeList listNode, ArrayList<String> arrStrCompare, String strNewValue) {
@@ -137,8 +221,7 @@ public class MetadataParser {
                 Node node = listNode.item(i);
                 // get the salary element, and update the value
 
-                System.out.println(node.getNodeName() + " " + strCompare);
-
+                //System.out.println(node.getNodeName() + " " + strCompare);
                 if (strCompare.equals(node.getNodeName())) {
 
                     if (iterator.hasNext()) {
