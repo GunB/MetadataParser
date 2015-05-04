@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,7 +14,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class ExcelReader {
+public final class ExcelReader {
 
     private String strUri = null;
     private XSSFSheet xssActualSheet = null;
@@ -99,7 +98,7 @@ public class ExcelReader {
             }
 
             if (!objKey.isEmpty() && !objValue.isEmpty()) {
-                objSheet.put(objKey, Joiner.on(" ").join(objValue));
+                objSheet.put(objKey, Joiner.on(" ").join(objValue).trim());
             }
 
             //System.out.println("");

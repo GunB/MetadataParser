@@ -5,7 +5,6 @@
  */
 package bin;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -22,6 +20,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -31,10 +30,12 @@ import model.Objeto;
 import model.Recurso;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.json.simple.parser.ParseException;
-import org.xml.sax.SAXException;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -46,6 +47,7 @@ public class MetadataParser {
     HashMap<String, HashMap> jConfig;
     public Leccion lecData;
     public Document xmlMetaBase;
+    File fXmlFile;
 
     public void ReadingConfig() throws IOException, ParseException {
         //String strUrl = System.getProperty("user.dir").concat("\\config.json");
@@ -58,7 +60,7 @@ public class MetadataParser {
     public void ReadMetadataBase() throws ParserConfigurationException, SAXException, IOException, TransformerException {
         String strUrl = System.getProperty("user.dir").concat("\\metadata.xml");
         System.out.println(strUrl);
-        File fXmlFile = new File(strUrl);
+        fXmlFile = new File(strUrl);
 
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -76,11 +78,11 @@ public class MetadataParser {
         xmlMetaBase = doc;
     }
 
-    public void CreateXMLFull() {
+    public void CreateXMLFull() throws TransformerException {
         CreateFullXMLObjeto();
     }
 
-    public void CreateFullXMLObjeto() {
+    public void CreateFullXMLObjeto() throws TransformerException {
         /*try {
          printDocument(xmlMetaBase, System.out);
          } catch (IOException | TransformerException ex) {
@@ -88,24 +90,29 @@ public class MetadataParser {
          }//*/
 
         // Get the staff element by tag name directly
-        Node node = xmlMetaBase.getElementById("lom");
-        NodeList list = node.getChildNodes();
-        //NodeList list = xmlMetaBase.getElementsByTagName("lom");
-        // loop the staff child node
-        //NodeList list = nodePrinc.getChildNodes();
+        Node staff = xmlMetaBase.getElementsByTagName("lom").item(0);
+        NodeList list = staff.getChildNodes();
 
         Objeto objObjeto = lecData.getObjObjeto();
 
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("title")), objObjeto.getStrID());
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("description")), objObjeto.getStrDesc());
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("identifier", "catalog")), objObjeto.getArrData().get("keyWord"));
-        
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "title")), objObjeto.getStrID());
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "description")), objObjeto.getStrDesc());
+        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "identifier", "catalog")), objObjeto.getArrData().get("keyWord"));
+
+        // write the content into xml file
         lecData.setObjObjeto(objObjeto);
-        
-        xmlMetaBase.appendChild(node);
-        
-        pruebaPrint();
+
+        //xmlMetaBase.appendChild(node);
+        //pruebaPrint();
         //*/
+    }
+
+    public void SaveChangesXML() throws TransformerConfigurationException, TransformerException {
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        DOMSource source = new DOMSource(xmlMetaBase);
+        StreamResult result = new StreamResult(fXmlFile);
+        transformer.transform(source, result);
     }
 
     private void pruebaPrint() {
@@ -129,12 +136,18 @@ public class MetadataParser {
             for (int i = 0; i < listNode.getLength(); i++) {
                 Node node = listNode.item(i);
                 // get the salary element, and update the value
+
+                System.out.println(node.getNodeName() + " " + strCompare);
+
                 if (strCompare.equals(node.getNodeName())) {
+
                     if (iterator.hasNext()) {
-                        node = (Node) ChangeNode(node.getChildNodes(), arrTempList, strNewValue);
+                        node = ChangeNode(node.getChildNodes(), arrTempList, strNewValue).item(0);
                     } else {
                         node.setTextContent(strNewValue);
                     }
+
+                    break;
                 }
             }
 
@@ -177,7 +190,7 @@ public class MetadataParser {
 
         Objeto objTemp = new Objeto(
                 objSheet.get("Título"),
-                objSheet.get("Nomenclatura"),
+                lecData.getStrID() + objSheet.get("Nomenclatura"),
                 objSheet.get("Descripción")
         );
 
@@ -197,7 +210,7 @@ public class MetadataParser {
         for (String strName : xlsRead.arrSheetNames) {
             readedSheet = xlsRead.ReadSheetbyName(strName);
             objSheet = ExcelReader.turnSheetToObject(readedSheet);
-            Recurso createRecurso = createRecurso(objSheet);
+            Recurso createRecurso = createRecurso(objSheet, objTemp);
             recData.add(createRecurso);
         }
 
@@ -206,7 +219,7 @@ public class MetadataParser {
 
     }
 
-    private Recurso createRecurso(HashMap<String, String> objSheet) {
+    private Recurso createRecurso(HashMap<String, String> objSheet, Objeto objLeccion) {
 
         HashMap<String, String> objData = new HashMap<>();
 
@@ -217,7 +230,7 @@ public class MetadataParser {
         objData.put("recommendedUse", objSheet.get("Sugerencia de Uso\n" + "(Recommended Use)"));
 
         Recurso recTemp = new Recurso(objSheet.get("Título"),
-                objSheet.get("Nomenclatura"),
+                objLeccion.getStrID() + objSheet.get("Nomenclatura"),
                 objSheet.get("Descripción"));
 
         recTemp.setArrData(objData);

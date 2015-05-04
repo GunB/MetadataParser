@@ -19,6 +19,7 @@ import javax.xml.transform.TransformerException;
 import org.json.simple.parser.ParseException;
 import org.xml.sax.SAXException;
 import utiility.AccionesVentana;
+import utiility.FileOptions;
 
 /**
  *
@@ -60,6 +61,13 @@ public class Index extends javax.swing.JFrame {
             txtSearch.setText("");
         }
         
+        try {
+            txtXmlData.setText(System.getProperty("user.dir").concat("\\Generated_metadata"));
+            FileOptions.listFilesForFolder(new File(txtXmlData.getText()));
+        } catch (NullPointerException ex) {
+            txtXmlData.setText("");
+        }
+        
     }
 
     /**
@@ -75,8 +83,6 @@ public class Index extends javax.swing.JFrame {
         btnSearchExcel = new javax.swing.JButton();
         txtSearch = new javax.swing.JTextField();
         btnGenerate = new javax.swing.JButton();
-        pnlTab = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         pnlXML = new javax.swing.JPanel();
         btnSearchMeta = new javax.swing.JButton();
         txtXmlData = new javax.swing.JTextField();
@@ -84,6 +90,7 @@ public class Index extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Excel Data");
+        setResizable(false);
 
         pnlExcel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 204, 0)), "Excel Data"));
         pnlExcel.setToolTipText("Excel data");
@@ -135,31 +142,7 @@ public class Index extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlTab.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "XML"));
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "ID", "DATA"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        pnlTab.setViewportView(jTable1);
-
-        pnlXML.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)), "XML MetaData"));
+        pnlXML.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)), "XML Metadata Folder"));
 
         btnSearchMeta.setText("Search");
         btnSearchMeta.addActionListener(new java.awt.event.ActionListener() {
@@ -186,7 +169,7 @@ public class Index extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(btnSearchMeta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtXmlData)
+                .addComponent(txtXmlData, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -210,8 +193,7 @@ public class Index extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(pnlXML, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlTab, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
+                    .addComponent(pnlExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -221,9 +203,7 @@ public class Index extends javax.swing.JFrame {
                 .addComponent(pnlExcel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pnlXML, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlTab, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pnlExcel.getAccessibleContext().setAccessibleName("Excel");
@@ -257,42 +237,38 @@ public class Index extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGenerateActionPerformed
 
     private void btnSearchMetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchMetaActionPerformed
-        JFileChooser jchus = new JFileChooser();
-
-        FileFilter filter = new FileFilter() {
-
-            @Override
-            public boolean accept(File pathname) {
-                if (null != pathname && pathname.getName().endsWith("metadata.xml")) {
-                    return acceptByteCode(pathname);
-                } else {
-                    return (null != pathname && pathname.exists() && pathname.isDirectory());
-                }
-            }//accept
-
-            private boolean acceptByteCode(File dir) {
-                boolean res = (null != dir && dir.exists() && dir.isFile());
-                return res;
-            }
-
-            @Override
-            public String getDescription() {
-                return "XML Metadata";
-            }
-        };
-
-        jchus.setFileFilter(filter);
-
-        jchus.showDialog(this, null);
+        JFileChooser chooser = new JFileChooser();
+        
+        chooser.setCurrentDirectory(new java.io.File("."));
+        //chooser.setDialogTitle(choosertitle);
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    //
+        // disable the "All files" option.
+        //
+        chooser.setAcceptAllFileFilterUsed(false);
+        //    
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            System.out.println("getCurrentDirectory(): "
+                    + chooser.getCurrentDirectory());
+            System.out.println("getSelectedFile() : "
+                    + chooser.getSelectedFile());
+        } else {
+            System.out.println("No Selection ");
+        }
+        
         try {
-            txtXmlData.setText(jchus.getSelectedFile().getAbsolutePath());
+            txtXmlData.setText(chooser.getSelectedFile().getAbsolutePath());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_btnSearchMetaActionPerformed
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        mParser.CreateXMLFull();
+        try {
+            mParser.CreateXMLFull();
+        } catch (TransformerException ex) {
+            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnCreateActionPerformed
 
     /**
@@ -331,9 +307,7 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JButton btnGenerate;
     private javax.swing.JButton btnSearchExcel;
     private javax.swing.JButton btnSearchMeta;
-    private javax.swing.JTable jTable1;
     private javax.swing.JPanel pnlExcel;
-    private javax.swing.JScrollPane pnlTab;
     private javax.swing.JPanel pnlXML;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtXmlData;
