@@ -17,6 +17,7 @@ public class Recurso {
     String strNombre;
     String strID;
     String strDesc;
+    Objeto objObjeto;
     
     HashMap<String, String> arrData = new HashMap<>();
     
@@ -60,5 +61,15 @@ public class Recurso {
     public void setArrData(HashMap<String, String> arrData) {
         this.arrData = arrData;
     }
+
+    public Objeto getObjObjeto() {
+        return objObjeto;
+    }
+
+    public void setObjObjeto(Objeto objObjeto) {
+        this.objObjeto = objObjeto;
+    }
+    
+    
     
 }

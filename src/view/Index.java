@@ -261,10 +261,9 @@ public class Index extends javax.swing.JFrame {
 
         try {
             mParser.CreateXMLFull(txtXmlData.getText());
-        } catch (TransformerException | IOException ex) {
+        } catch (TransformerException | IOException | ParserConfigurationException | SAXException ex) {
             Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_btnCreateActionPerformed
 
     /**

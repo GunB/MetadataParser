@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><lom xmlns="http://ltsc.ieee.org/xsd/LOM">
+    <general>
+        <identifier>
+            <catalog catName="" catSource="">esnlec1obj1re1</catalog>
+        </identifier>
+        <title lang="" subtitle=""/>
+        <description lang="es">Este recurso digital “Colocar título del recurso” es el primer recurso del objeto  “Colocar el nombre del objeto”, hace parte de la lección No.(Cambiar por el número de la lección Ej: 1) “Cambiar por título de la lección“, el cual pertenece al nivel “Cambiar por el nombre del nivel" de la enseñanza del español como segunda lengua. La intención de este recurso es (Colocar el tema del objeto seguido del resultado de aprendizaje y la(s) preguntas detonantes).</description>
+        <keyword lang=""/>
+        <structure schema="CEM"/>
+        <aggregationLevel schema="CEM"/>
+    </general>
+    <lifeCycle/>
+    <metaMetadata/>
+    <technical/>
+    <educational>
+        <description>
+            <recommendedUse lang="es">Este recurso educativo digital puede ser usado como una actividad de calentamiento para motivar al estudiante y presentar un tema que le permita establecer una relación entre  el conocimiento previo y el nuevo.</recommendedUse>
+            <triggerQuestion lang="es"/>
+            <pedagogicalAspect lang="es">Este recurso tiene la intención de motivar al estudiante mediante la presentación de un tema y a establecer una relación entre  el conocimiento previo y el nuevo.</pedagogicalAspect>
+            <learningGoal lang="es"/>
+        </description>
+    </educational>
+    <rights/>
+    
+    <classification>
+    </classification>
+<relation>
+        <kind schema="">Es parte de</kind>
+        <resource>
+            <identifier>
+                <catalog catName="" catSource="">esnlec1obj1</catalog>
+            </identifier>
+            <description lang="">Este objeto de aprendizaje “Cambiar por título del objeto", que forma parte de la lección (Número de la lección) “Cambiar por título de la lección", la cual pertenece, a su vez, al nivel “Cambiar por nombre del nivel“ de la enseñanza del español como segunda lengua, donde el aprendiz: “Colocar la función comunicativa”. Una vez terminado el objeto de aprendizaje el aprendiz: Colocar el resultado del aprendizaje</description>
+        </resource>
+    </relation></lom>

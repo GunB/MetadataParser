@@ -49,6 +49,7 @@ public class MetadataParser {
     HashMap<String, HashMap> jConfig;
     public Leccion lecData;
     private Document xmlMetaBase = null;
+    Node ndRelacion = null;
 
     public Document xmlMetaActual;
     File fXmlFile;
@@ -77,10 +78,16 @@ public class MetadataParser {
             doc.getDocumentElement().normalize();
 
             System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-        //this.jConfig = new Gson().fromJson(new FileReader(f).toString(), HashMap.class);
+            //this.jConfig = new Gson().fromJson(new FileReader(f).toString(), HashMap.class);
             //System.out.println(jObject);
 
             //printDocument(doc, System.out);
+            ndRelacion = doc.getElementsByTagName("relation").item(0);
+            // retrieve the element 'link'
+            Element element = (Element) doc.getElementsByTagName("relation").item(0);
+            // remove the specific node
+            element.getParentNode().removeChild(element);
+
             xmlMetaBase = doc;
         }
         xmlMetaActual = xmlMetaBase;
@@ -89,19 +96,19 @@ public class MetadataParser {
     public void CreateXMLFull(String strPath) throws TransformerException, IOException, ParserConfigurationException, SAXException {
         ReadMetadataBase();
         CreateFullXMLObjeto(strPath, lecData.getObjObjeto());
-        
+
         Iterator<Recurso> arrRecData = lecData.getObjObjeto().getArrRecursos().iterator();
-        
-        while(arrRecData.hasNext()){
+
+        while (arrRecData.hasNext()) {
             Recurso recData = arrRecData.next();
             ReadMetadataBase();
             CreateFullXMLRecurso(strPath, recData);
         }
-        
+
     }
 
     public void CreateFullXMLObjeto(String strPath, Objeto objObjeto) throws TransformerException, TransformerConfigurationException, IOException {
-        Node staff = xmlMetaActual.getElementsByTagName("lom").item(0);
+        Node staff = xmlMetaActual.getElementsByTagName("lom").item(0).cloneNode(true);
         NodeList list = staff.getChildNodes();
 
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "title")), objObjeto.getStrNombre());
@@ -110,19 +117,45 @@ public class MetadataParser {
 
         String[] arrKeyWords = objObjeto.getArrData().get("keyWord").split(",");
         list = AddNodeList2Node(list, new ArrayList<>(Arrays.asList("general", "keyword")), arrKeyWords, new XMLTag("li"));
-        
+
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "learningGoal")), objObjeto.getArrData().get("learningGoal"));
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "triggerQuestion")), objObjeto.getArrData().get("triggerQuestion"));
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "pedagogicalAspect")), objObjeto.getArrData().get("pedagogicalAspect"));
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "recommendedUse")), objObjeto.getArrData().get("recommendedUse"));
 
+        Node ndTemp = ndRelacion.cloneNode(true);
+        NodeList ndListTemp = ndTemp.getChildNodes();
+        
+        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("kind")), "Es parte de");
+        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "identifier", "catalog")), lecData.getStrID());
+        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "description")), lecData.getStrDesc());
+        staff.appendChild(ndTemp);
+        
+        Iterator<Recurso> ite = objObjeto.getArrRecursos().iterator();
+        while(ite.hasNext()){
+            Recurso recTemp = ite.next();
+            staff.appendChild(RelationObjetoRecurso(recTemp));
+        }
+        
+        //staff.appendChild(RelationObjetoRecurso())
         // write the content into xml file
         lecData.setObjObjeto(objObjeto);
-        SaveChangesXML(strPath + File.separator + objObjeto.getStrID() + File.separator + "metadata.xml");
+        SaveChangesXML(strPath + File.separator + objObjeto.getStrID() + File.separator + "metadata.xml", staff);
     }
     
-    public void CreateFullXMLRecurso(String strPath, Recurso recData) throws TransformerException, TransformerConfigurationException, IOException{
-        Node staff = xmlMetaActual.getElementsByTagName("lom").item(0);
+    private Node RelationObjetoRecurso(Recurso recData){
+        Node ndTemp = ndRelacion.cloneNode(true);
+        NodeList ndListTemp = ndTemp.getChildNodes();
+        
+        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("kind")), "Esta compuesto por");
+        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "identifier", "catalog")), recData.getStrID());
+        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "description")), recData.getStrDesc());
+        
+        return ndTemp;
+    }
+
+    public void CreateFullXMLRecurso(String strPath, Recurso recData) throws TransformerException, TransformerConfigurationException, IOException {
+        Node staff = xmlMetaActual.getElementsByTagName("lom").item(0).cloneNode(true);
         NodeList list = staff.getChildNodes();
 
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "title")), recData.getStrNombre());
@@ -131,18 +164,25 @@ public class MetadataParser {
 
         String[] arrKeyWords = recData.getArrData().get("keyWord").split(",");
         list = AddNodeList2Node(list, new ArrayList<>(Arrays.asList("general", "keyword")), arrKeyWords, new XMLTag("li"));
-        
+
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "learningGoal")), recData.getArrData().get("learningGoal"));
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "triggerQuestion")), recData.getArrData().get("triggerQuestion"));
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "pedagogicalAspect")), recData.getArrData().get("pedagogicalAspect"));
         list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "recommendedUse")), recData.getArrData().get("recommendedUse"));
-
-        // write the content into xml file
-        //lecData.setObjObjeto(recData);
-        SaveChangesXML(strPath + File.separator + recData.getStrID() + File.separator + "metadata.xml");
+        
+        Node ndTemp = ndRelacion.cloneNode(true);
+        NodeList ndListTemp = ndTemp.getChildNodes();
+        
+        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("kind")), "Es parte de");
+        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "identifier", "catalog")), recData.getObjObjeto().getStrID());
+        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "description")), recData.getObjObjeto().getStrDesc());
+        
+        staff.appendChild(ndTemp);
+        
+        SaveChangesXML(strPath + File.separator + recData.getStrID() + File.separator + "metadata.xml", staff);
     }
 
-    public void SaveChangesXML(String strPath) throws TransformerConfigurationException, TransformerException, IOException {
+    public void SaveChangesXML(String strPath, Node ndSave) throws TransformerConfigurationException, TransformerException, IOException {
         String path = strPath;
 
         //(use relative path for Unix systems)
@@ -153,14 +193,14 @@ public class MetadataParser {
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(xmlMetaActual);
+        DOMSource source = new DOMSource(ndSave);
         StreamResult result = new StreamResult(f);
         transformer.transform(source, result);
     }
 
     private void pruebaPrint() {
         try {
-            printDocument(xmlMetaBase, System.out);
+            printDocument(xmlMetaActual, System.out);
         } catch (IOException | TransformerException ex) {
             Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -188,7 +228,7 @@ public class MetadataParser {
 
                         for (String s : arrNewData) {
                             s = s.trim();
-                            
+
                             if (!s.isEmpty()) {
                                 Node item = xmlMetaActual.createElement(xmlTag.getStrName());
                                 item.appendChild(xmlMetaActual.createTextNode(s));
@@ -276,6 +316,8 @@ public class MetadataParser {
                 lecData.getStrID() + objSheet.get("Nomenclatura"),
                 objSheet.get("Descripción")
         );
+        
+        objTemp.setLecLeccion(lecData);
 
         HashMap<String, String> objData = new HashMap<>();
 
@@ -299,7 +341,6 @@ public class MetadataParser {
 
         objTemp.setArrRecursos(recData);
         lecData.setObjObjeto(objTemp);
-
     }
 
     private Recurso createRecurso(HashMap<String, String> objSheet, Objeto objLeccion) {
@@ -315,6 +356,8 @@ public class MetadataParser {
         Recurso recTemp = new Recurso(objSheet.get("Título"),
                 objLeccion.getStrID() + objSheet.get("Nomenclatura"),
                 objSheet.get("Descripción"));
+        
+        recTemp.setObjObjeto(objLeccion);
 
         recTemp.setArrData(objData);
 

@@ -17,6 +17,7 @@ public class Objeto {
     String strNombre;
     String strID;
     String strDesc;
+    Leccion lecLeccion;
 
     HashMap<String, String> arrData = new HashMap<>();
 
@@ -68,6 +69,14 @@ public class Objeto {
 
     public void setArrRecursos(ArrayList<Recurso> arrRecursos) {
         this.arrRecursos = arrRecursos;
+    }
+
+    public Leccion getLecLeccion() {
+        return lecLeccion;
+    }
+
+    public void setLecLeccion(Leccion lecLeccion) {
+        this.lecLeccion = lecLeccion;
     }
 
 }

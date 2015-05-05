@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><lom xmlns="http://ltsc.ieee.org/xsd/LOM">
+    <general>
+        <identifier>
+            <catalog catName="" catSource="">esnlec1obj1re6</catalog>
+        </identifier>
+        <title lang="" subtitle=""/>
+        <description lang="es"/>
+        <keyword lang=""/>
+        <structure schema="CEM"/>
+        <aggregationLevel schema="CEM"/>
+    </general>
+    <lifeCycle/>
+    <metaMetadata/>
+    <technical/>
+    <educational>
+        <description>
+            <recommendedUse lang="es"/>
+            <triggerQuestion lang="es"/>
+            <pedagogicalAspect lang="es"/>
+            <learningGoal lang="es"/>
+        </description>
+    </educational>
+    <rights/>
+    
+    <classification>
+    </classification>
+<relation>
+        <kind schema="">Es parte de</kind>
+        <resource>
+            <identifier>
+                <catalog catName="" catSource="">esnlec1obj1</catalog>
+            </identifier>
+            <description lang="">Este objeto de aprendizaje “Cambiar por título del objeto", que forma parte de la lección (Número de la lección) “Cambiar por título de la lección", la cual pertenece, a su vez, al nivel “Cambiar por nombre del nivel“ de la enseñanza del español como segunda lengua, donde el aprendiz: “Colocar la función comunicativa”. Una vez terminado el objeto de aprendizaje el aprendiz: Colocar el resultado del aprendizaje</description>
+        </resource>
+    </relation></lom>
