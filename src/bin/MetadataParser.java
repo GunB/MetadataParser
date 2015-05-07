@@ -5,8 +5,6 @@
  */
 package bin;
 
-import com.sun.org.apache.xerces.internal.dom.DocumentImpl;
-import com.sun.org.apache.xerces.internal.dom.NodeImpl;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -313,7 +311,7 @@ public class MetadataParser {
 
         Objeto objTemp = new Objeto(
                 objSheet.get("Título"),
-                lecData.getStrID() + objSheet.get("Nomenclatura"),
+                objSheet.get("Nomenclatura"),
                 objSheet.get("Descripción")
         );
         
@@ -354,7 +352,7 @@ public class MetadataParser {
         objData.put("recommendedUse", objSheet.get("Sugerencia de Uso\n" + "(Recommended Use)"));
 
         Recurso recTemp = new Recurso(objSheet.get("Título"),
-                objLeccion.getStrID() + objSheet.get("Nomenclatura"),
+                objSheet.get("Nomenclatura"),
                 objSheet.get("Descripción"));
         
         recTemp.setObjObjeto(objLeccion);

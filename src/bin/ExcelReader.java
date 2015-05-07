@@ -14,30 +14,37 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ *  Lector de excel utilizando las librerías de Apach (Apache poi).
+ * @author hangarita
+ */
 public final class ExcelReader {
 
     private String strUri = null;
     private XSSFSheet xssActualSheet = null;
     private XSSFWorkbook xssActualBook = null;
-    private Object objSheet = null;
+
+    /**
+     *  Arreglo de hojas leídas de un libro de excel
+     */
     public ArrayList<String> arrSheetNames = null;
     
-    
-
+    /**
+     *  Constructor del lector. Define automáticamente el nombre de las hojas y 
+     * prepara el programa para tener el objeto excel.
+     * @param strUri
+     * @throws IOException
+     */
     public ExcelReader(String strUri) throws IOException {
         this.strUri = strUri;
         ReadFile();
         getArrSheetNames();
     }
 
-    public Object getObjSheet() {
-        return objSheet;
-    }
-
-    public void setObjSheet(Object objSheet) {
-        this.objSheet = objSheet;
-    }
-
+    /**
+     *
+     * @return
+     */
     public ArrayList<String> getArrSheetNames() {
         arrSheetNames = new ArrayList<>();
         Iterator<XSSFSheet> iteSheet = xssActualBook.iterator();
@@ -51,14 +58,30 @@ public final class ExcelReader {
         return this.arrSheetNames;
     }
 
+    /**
+     *
+     * @return Regresa el String de dirección de donde fué leído el libro
+     */
     public String getStrUri() {
         return strUri;
     }
 
+    /**
+     *
+     * @return Obtiene una hoja en formato Apache poi
+     */
     public XSSFSheet getXssActualSheet() {
         return xssActualSheet;
     }
 
+    /**
+     *
+     * @param xssSheet Hoja en formato Apache poi a transformar.
+     * @return  Regresa la hoja en un Hashmap Clave, Valor siendo la clave el 
+     * valor ingresado en el lado izquierdo y todo lo demas como valor. Si la clave
+     * y el valor no son vacios, se reconocen como una nueva entrada correcta para el
+     * Hashmap
+     */
     public static HashMap turnSheetToObject(XSSFSheet xssSheet) {
         HashMap<String, String> objSheet = new HashMap();
         //Iterate through each rows one by one
@@ -100,7 +123,7 @@ public final class ExcelReader {
             }
 
             if (!objKey.isEmpty() && !objValue.isEmpty()) {
-                objSheet.put(objKey, Joiner.on(" ").join(objValue).trim());
+                objSheet.put(objKey, Joiner.on("").join(objValue).trim());
             }
 
             //System.out.println("");
@@ -117,16 +140,30 @@ public final class ExcelReader {
         //return this.xssActualBook;
     }
 
+    /**
+     *
+     * @param strName nombre de hoja de calculo.
+     * @return Regresa una hoja en formato Apache poi y además laa signa como 
+     * la hoja actual a trabajar en la variable @xssActualSheet
+     */
     public XSSFSheet ReadSheetbyName(String strName) {
         this.xssActualSheet = this.xssActualBook.getSheet(strName);
         return xssActualSheet;
     }
 
+    /**
+     *
+     * @param intId 
+     * @return
+     */
     public XSSFSheet ReadSheetbyId(int intId) {
         this.xssActualSheet = this.xssActualBook.getSheetAt(intId);
         return xssActualSheet;
     }
 
+    /**
+     *
+     */
     public void ReadnShowFile() {
         try {
             FileInputStream file = new FileInputStream(new File(this.strUri));
