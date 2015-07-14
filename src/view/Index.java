@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import org.json.simple.parser.ParseException;
+
 import org.xml.sax.SAXException;
 import utiility.AccionesVentana;
 import utiility.FileOptions;
@@ -36,14 +36,6 @@ public class Index extends javax.swing.JFrame {
         AccionesVentana.LooknFeel();
         initComponents();
         nuevo = new AccionesVentana(this, "XML Data Generator");
-
-        try {
-            mParser.ReadingConfig();
-        } catch (IOException | ParseException ex) {
-            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Config file is broken or missing", "ERROR", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
-        }
 
         try {
             mParser.ReadMetadataBase();

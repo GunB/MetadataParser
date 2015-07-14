@@ -30,7 +30,7 @@ import model.Objeto;
 import model.Recurso;
 import model.XMLTag;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.json.simple.parser.ParseException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -52,7 +52,7 @@ public class MetadataParser {
     public Document xmlMetaActual;
     File fXmlFile;
 
-    public void ReadingConfig() throws IOException, ParseException {
+    public void ReadingConfig() throws IOException {
         //String strUrl = System.getProperty("user.dir").concat("\\config.json");
         //System.out.println(strUrl);
         //File f = new File(strUrl);
