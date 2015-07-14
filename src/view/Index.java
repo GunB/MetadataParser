@@ -18,7 +18,7 @@ import javax.xml.transform.TransformerException;
 
 import org.xml.sax.SAXException;
 import utiility.AccionesVentana;
-import utiility.FileOptions;
+
 
 /**
  *
@@ -207,8 +207,8 @@ public class Index extends javax.swing.JFrame {
         jchus.showDialog(this, null);
         try {
             txtSearch.setText(jchus.getSelectedFile().getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_btnSearchExcelActionPerformed
@@ -244,8 +244,8 @@ public class Index extends javax.swing.JFrame {
 
         try {
             txtXmlData.setText(chooser.getSelectedFile().getAbsolutePath());
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSearchMetaActionPerformed
 
