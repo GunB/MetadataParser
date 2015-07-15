@@ -50,12 +50,11 @@ public class Index extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel3 = new javax.swing.JPanel();
         pnlFolder = new javax.swing.JPanel();
         btnSearch = new javax.swing.JButton();
         txtFolderProyect = new javax.swing.JTextField();
         btnRead = new javax.swing.JButton();
-        btnFix = new javax.swing.JButton();
-        lblMessage = new javax.swing.JLabel();
         tbbData = new javax.swing.JTabbedPane();
         pnlData = new javax.swing.JScrollPane();
         tblData = new javax.swing.JTable();
@@ -65,12 +64,14 @@ public class Index extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         chkCopyAll = new javax.swing.JCheckBox();
         chkIgnireFather = new javax.swing.JCheckBox();
+        lblMessage = new javax.swing.JLabel();
+        btnFix = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         pnlFolder.setBorder(javax.swing.BorderFactory.createTitledBorder("Object Folder"));
 
-        btnSearch.setText("Search");
+        btnSearch.setText("Buscar");
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchActionPerformed(evt);
@@ -85,7 +86,7 @@ public class Index extends javax.swing.JFrame {
             }
         });
 
-        btnRead.setText("Read");
+        btnRead.setText("Leer");
         btnRead.setEnabled(false);
         btnRead.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,17 +117,6 @@ public class Index extends javax.swing.JFrame {
                     .addComponent(btnRead))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        btnFix.setText("Fix!");
-        btnFix.setEnabled(false);
-        btnFix.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFixActionPerformed(evt);
-            }
-        });
-
-        lblMessage.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblMessage.setForeground(new java.awt.Color(255, 0, 0));
 
         tblData.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -232,7 +222,7 @@ public class Index extends javax.swing.JFrame {
                 {null}
             },
             new String [] {
-                "FILES"
+                "ARCHIVOS"
             }
         ) {
             Class[] types = new Class [] {
@@ -252,10 +242,11 @@ public class Index extends javax.swing.JFrame {
         });
         pnlData.setViewportView(tblData);
 
-        tbbData.addTab("File List", pnlData);
+        tbbData.addTab("Lista de archivos", pnlData);
 
-        txtConsole.setBackground(new java.awt.Color(0, 153, 153));
+        txtConsole.setBackground(new java.awt.Color(0, 51, 51));
         txtConsole.setColumns(20);
+        txtConsole.setFont(new java.awt.Font("Monospaced", 1, 13)); // NOI18N
         txtConsole.setForeground(new java.awt.Color(0, 255, 51));
         txtConsole.setRows(5);
         jScrollPane1.setViewportView(txtConsole);
@@ -264,17 +255,19 @@ public class Index extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
+                .addGap(4, 4, 4))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
         );
 
-        tbbData.addTab("Console", jPanel1);
+        tbbData.addTab("Consola", jPanel1);
 
         chkCopyAll.setSelected(true);
-        chkCopyAll.setText("Copy data to \"eFixer\" Folder");
+        chkCopyAll.setText("Copiar datos en la carpeta \"eFixer\"");
         chkCopyAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkCopyAllActionPerformed(evt);
@@ -282,7 +275,7 @@ public class Index extends javax.swing.JFrame {
         });
 
         chkIgnireFather.setSelected(true);
-        chkIgnireFather.setText("Ignore father to create relations from Children (\"Esta compuesto por\")");
+        chkIgnireFather.setText("Ignorar padre para crear relaciones de hijos (\"Esta compuesto por\")");
         chkIgnireFather.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkIgnireFatherActionPerformed(evt);
@@ -298,7 +291,7 @@ public class Index extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(chkCopyAll)
                     .addComponent(chkIgnireFather))
-                .addContainerGap(134, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,39 +300,62 @@ public class Index extends javax.swing.JFrame {
                 .addComponent(chkCopyAll)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(chkIgnireFather)
-                .addContainerGap(194, Short.MAX_VALUE))
+                .addContainerGap(175, Short.MAX_VALUE))
         );
 
-        tbbData.addTab("Options", jPanel2);
+        tbbData.addTab("Opciones", jPanel2);
+
+        lblMessage.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblMessage.setForeground(new java.awt.Color(255, 0, 0));
+
+        btnFix.setText("Iniciar");
+        btnFix.setEnabled(false);
+        btnFix.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFixActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tbbData)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnFix)))
+                        .addContainerGap())))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(tbbData, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblMessage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnFix, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(406, 406, 406)
-                        .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnFix))
-                    .addComponent(tbbData, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
-                    .addComponent(pnlFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tbbData, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnFix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -472,6 +488,7 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JCheckBox chkIgnireFather;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblMessage;
     private javax.swing.JScrollPane pnlData;
