@@ -23,6 +23,7 @@ import javax.swing.filechooser.FileSystemView;
 
 public class FilesUtility {
     
+    public static String strRoot = System.getProperty("user.dir");
     private static long unixTime = System.currentTimeMillis() / 1000L;
     private static String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(Calendar.getInstance().getTime());
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><lom xmlns="http://ltsc.ieee.org/xsd/LOM">
+    <general>
+        <identifier>
+            <catalog catName="" catSource=""/>
+        </identifier>
+        <title lang="" subtitle=""></title>
+        <description lang="es"/>
+        <keyword lang=""/>
+        <structure schema="CEM"/>
+        <aggregationLevel schema="CEM"/>
+    </general>
+    <lifeCycle/>
+    <metaMetadata/>
+    <technical/>
+    <educational>
+        <description>
+            <recommendedUse lang="es"/>
+            <triggerQuestion lang="es"/>
+            <pedagogicalAspect lang="es"/>
+            <learningGoal lang="es"/>
+        </description>
+    </educational>
+    <rights/>
+    <relation>
+        <kind schema=""/>
+        <resource>
+            <identifier>
+                <catalog catName="" catSource=""/>
+            </identifier>
+            <description lang=""/>
+        </resource>
+    </relation>
+    <classification>
+    </classification>
+</lom>

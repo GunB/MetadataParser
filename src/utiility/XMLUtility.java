@@ -29,13 +29,7 @@ import org.xml.sax.SAXException;
 
 public class XMLUtility {
 
-    public static NodeList AddNodeList2Node(NodeList listNode, ArrayList<String> arrStrCompare, String[] arrNewData, XMLTag xmlTag)
-            throws ParserConfigurationException {
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-        Document doc = docBuilder.newDocument();
-
+    public static NodeList AddNodeList2Node(NodeList listNode, Document docFather, ArrayList<String> arrStrCompare, String[] arrNewData, XMLTag xmlTag) throws ParserConfigurationException, SAXException, IOException {
         ArrayList<String> arrTempList = arrStrCompare;
         Iterator<String> iterator = arrTempList.iterator();
 
@@ -48,7 +42,7 @@ public class XMLUtility {
 
                 if (strCompare.equals(node.getNodeName())) {
                     if (iterator.hasNext()) {
-                        node = AddNodeList2Node(node.getChildNodes(), arrTempList, arrNewData, xmlTag).item(0);
+                        node = AddNodeList2Node(node.getChildNodes(), docFather, arrTempList, arrNewData, xmlTag).item(0);
                         break;
                     }
 
@@ -56,8 +50,9 @@ public class XMLUtility {
                         s = s.trim();
 
                         if (!s.isEmpty()) {
-                            Node item = doc.createElement(xmlTag.getStrName());
-                            item.appendChild(doc.createTextNode(s));
+                            Node item = xmlTag.returnFullNode(s);
+                            docFather.adoptNode(item);
+                            //item.appendChild(item);
                             node.appendChild(item);
                         }
                     }

@@ -21,15 +21,6 @@
         </description>
     </educational>
     <rights/>
-    <relation>
-        <kind schema=""/>
-        <resource>
-            <identifier>
-                <catalog catName="" catSource=""/>
-            </identifier>
-            <description lang=""/>
-        </resource>
-    </relation>
     <classification>
     </classification>
 </lom>

@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
@@ -25,6 +27,7 @@ public class MetadataParser implements Runnable {
     private boolean isCopy = true;
     private String strPath;
     private JLabel lblData = null;
+    private boolean isIgnoreFather = false;
 
     PrintWriter newLog;
     String strNameLog = "READLOG";
@@ -35,9 +38,11 @@ public class MetadataParser implements Runnable {
     public MetadataParser(Object params) {
         Object[] objData = (Object[]) params;
 
-        this.isCopy = ((Boolean) objData[0]).booleanValue();
-        this.strPath = ((String) objData[1]);
-        this.lblData = ((JLabel) objData[2]);
+        this.isCopy =           ((Boolean) objData[2]);
+        this.isIgnoreFather =   ((Boolean) objData[3]);
+        
+        this.strPath = ((String) objData[0]);
+        this.lblData = ((JLabel) objData[1]);
     }
 
     public MetadataParser() {
@@ -64,70 +69,82 @@ public class MetadataParser implements Runnable {
 
         ArrayList<File> listFilesForFolder = JFolderChooser.listRawFilesForFolder(baseFileDirectory, true);
 
-        Object arrRec = new ArrayList();
-        ArrayList<SharableContentObject> arrObj = new ArrayList();
-        ArrayList<SharableContentObject> arrLec = new ArrayList();
-        ArrayList<SharableContentObject> arrLvl = new ArrayList();
+        HashMap<String, SharableContentObject> arrRec = new HashMap();
+        HashMap<String, SharableContentObject> arrObj = new HashMap();
+        HashMap<String, SharableContentObject> arrLec = new HashMap();
+        HashMap<String, SharableContentObject> arrLvl = new HashMap();
 
-        ArrayList<ExcelReader> arrExcel = new ArrayList();
+        ArrayList<ExcelFormat> arrExcel = new ArrayList();
 
         String strMessage = "Leyendo SCO(s)... ";
-        String strMessage2 = "REL: ";
-
+        String strMessage2;
         Log(strMessage);
 
         //<editor-fold defaultstate="collapsed" desc="Reading SCO(s)">
         for (File strNameFolder : listFilesForFolder) {
             SharableContentObject scoData = null;
-            
+
+            if (strNameFolder.getName().startsWith("~$")) {
+                continue;
+            }
+
             if (strNameFolder.getName().endsWith(".zip")) {
                 try {
                     scoData = new SharableContentObject(new ZipReader(strNameFolder));
-                    
+                    if (scoData.getStrType().equals("VACIO")) {
+                        scoData.setStrID(strNameFolder.getName().substring(0, strNameFolder.getName().lastIndexOf('.')));
+                    }
                     Log(strMessage + scoData.getStrID());
                 } catch (IOException | SAXException | ParserConfigurationException | NullPointerException ex) {
                     System.err.println("ERROR [NOT METADATA]: " + strNameFolder.getName());
                     Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             if (strNameFolder.getName().endsWith(".xml")) {
                 try {
                     scoData = new SharableContentObject(new XMLReader(strNameFolder));
-                    
+                    if (scoData.getStrType().equals("VACIO")) {
+                        scoData.setStrID(strNameFolder.getName().substring(0, strNameFolder.getName().lastIndexOf('.')));
+                    }
                     Log(strMessage + scoData.getStrID());
                 } catch (IOException | SAXException | ParserConfigurationException | NullPointerException ex) {
                     System.err.println("ERROR [NOT METADATA]: " + strNameFolder.getName());
                     Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             if (strNameFolder.getName().endsWith(".xls") || strNameFolder.getName().endsWith(".xlsx")) {
                 try {
-                    ExcelReader excelReader = new ExcelReader(strNameFolder.getName());
-                    arrExcel.add(excelReader);
-                    
-                    Log(strMessage + excelReader.getStrUri());
+                    ExcelReader excelReader = new ExcelReader(strNameFolder);
+                    ExcelFormat excelFormat;
+                    try {
+                        excelFormat = new ExcelFormat(excelReader);
+                        arrExcel.add(excelFormat);
+                    } catch (ParserConfigurationException | SAXException ex) {
+                        Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    Log(strMessage + excelReader.getStrName());
                 } catch (IOException ex) {
                     System.err.println("ERROR [NOT READABLE]: " + strNameFolder.getName());
                     Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
             try {
                 if ((strNameFolder.getName().endsWith(".xml")) || (strNameFolder.getName().endsWith(".zip"))) {
                     switch (scoData.getStrType()) {
                         case "NIVEL":
-                            arrLvl.add(scoData);
+                            arrLvl.put(scoData.getStrID(), scoData);
                             break;
                         case "LECCION":
-                            arrLec.add(scoData);
+                            arrLec.put(scoData.getStrID(), scoData);
                             break;
                         case "OBJETO":
-                            arrObj.add(scoData);
+                            arrObj.put(scoData.getStrID(), scoData);
                             break;
                         case "RECURSO":
-                            ((ArrayList) arrRec).add(scoData);
+                            arrRec.put(scoData.getStrID(), scoData);
                     }
                 }
             } catch (NullPointerException ex) {
@@ -136,44 +153,103 @@ public class MetadataParser implements Runnable {
                 Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-//</editor-fold>
+        //</editor-fold>
+
+        strMessage = "Interpretando Excel... ";
+        strMessage2 = "FILL: ";
+        Log(strMessage);
+
+        //<editor-fold defaultstate="collapsed" desc="Extra data from Excel">
+        for (ExcelFormat reader : arrExcel) {
+
+            for (Entry<String, HashMap<String, String>> entry : reader.getArrObjects().entrySet()) {
+                String key = entry.getKey();
+                //HashMap value = entry.getValue();
+                String type = SharableContentObject.GetType(key);
+
+                HashMap arrActual = null;
+
+                //<editor-fold defaultstate="collapsed" desc="Typing">
+                switch (type) {
+                    case "NIVEL":
+                        arrActual = (HashMap) arrLvl.clone();
+                        //arrLvl.put(scoData.getStrID(), scoData);
+                        break;
+                    case "LECCION":
+                        arrActual = (HashMap) arrLec.clone();
+                        //arrLec.put(scoData.getStrID(), scoData);
+                        break;
+                    case "OBJETO":
+                        arrActual = (HashMap) arrObj.clone();
+                        //arrObj.put(scoData.getStrID(), scoData);
+                        break;
+                    case "RECURSO":
+                        arrActual = (HashMap) arrRec.clone();
+                        //arrRec.put(scoData.getStrID(), scoData);
+                        break;
+                }
+                //</editor-fold>
+
+                if (arrActual.containsKey(key)) {
+
+                    try {
+                        SharableContentObject get = (SharableContentObject) arrActual.get(key);
+                        reader.SharableContentObjectCompleter(get);
+                        
+                        Log(strMessage2 + key);
+                    } catch (ParserConfigurationException | SAXException | IOException ex) {
+                        Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                        Log("XML BASE ERROR!!!");
+                        JOptionPane.showMessageDialog(null, "XML BASE ERROR!!!", "Mensaje", JOptionPane.ERROR_MESSAGE);
+                        System.exit(0);
+                    }
+
+                } else {
+                    Log("EL ELEMENTO " + key + " NO EXISTE!");
+                }
+                // do what you have to do here
+                // In your case, an other loop.
+            }
+        }
+        //</editor-fold>
 
         strMessage = "Creando relaciones en los recursos... ";
+        strMessage2 = "REL: ";
+        Log(strMessage);
 
-        for (SharableContentObject scoData : (ArrayList<SharableContentObject>) arrRec) {
+        //<editor-fold defaultstate="collapsed" desc="Rels">
+        for (Entry<String, SharableContentObject> entryscoData : arrRec.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
             if (scoData.isRelationed()) {
                 Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
             } else {
                 Log(strMessage + scoData.getStrID());
                 int cont = 0;
-                for (SharableContentObject scoSCO : arrObj) {
+                for (Entry<String, SharableContentObject> entryscoSCO : arrObj.entrySet()) {
+                    SharableContentObject scoSCO = entryscoSCO.getValue();
+
                     if (scoData.getStrID().contains(scoSCO.getStrID())) {
                         cont++;
                         Log(strMessage2 + cont + " Es parte de \t" + scoSCO.getStrID());
                         scoData.SetRelation(scoSCO, "Es parte de");
                     }
                 }
-                try {
-                    Log("Guardando cambios... \t" + scoData.getStrID());
-                    scoData.SaveChanges();
-                } catch (IOException | TransformerException ex) {
-                    Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
-                    JOptionPane.showMessageDialog(null, ex);
-                    System.exit(6);
-                }
             }
         }
 
         strMessage = "Creando relaciones en los Objetos... ";
 
-        for (SharableContentObject scoData : arrObj) {
+        for (Entry<String, SharableContentObject> entryscoData : arrObj.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
             if (scoData.isRelationed()) {
                 Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
             } else {
                 boolean bulPadre = false;
 
                 int cont = 0;
-                for (SharableContentObject scoSCO : arrLec) {
+                for (Entry<String, SharableContentObject> entryscoSCO : arrLec.entrySet()) {
+                    SharableContentObject scoSCO = entryscoSCO.getValue();
+
                     if (scoData.getStrID().contains(scoSCO.getStrID())) {
                         bulPadre = true;
                         cont++;
@@ -182,24 +258,17 @@ public class MetadataParser implements Runnable {
                     }
                 }
 
-                if (bulPadre) {
+                if (bulPadre || isIgnoreFather) {
                     cont = 0;
                     Log(strMessage + scoData.getStrID());
 
-                    for (SharableContentObject scoSCO : (ArrayList<SharableContentObject>) arrRec) {
+                    for (Entry<String, SharableContentObject> entryscoSCO : arrRec.entrySet()) {
+                        SharableContentObject scoSCO = entryscoSCO.getValue();
                         if (scoSCO.getStrID().contains(scoData.getStrID())) {
                             cont++;
                             Log(strMessage2 + cont + " Está compuesto por \t" + scoSCO.getStrID());
                             scoData.SetRelation(scoSCO, "Está compuesto por");
                         }
-                    }
-                    try {
-                        Log("Guardando cambios... \t" + scoData.getStrID());
-                        scoData.SaveChanges();
-                    } catch (IOException | TransformerException ex) {
-                        Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
-                        JOptionPane.showMessageDialog(null, ex);
-                        System.exit(6);
                     }
                 } else {
                     Log("No fué identificado el padre... relaciones abortadas: " + scoData.getStrID());
@@ -209,7 +278,8 @@ public class MetadataParser implements Runnable {
 
         strMessage = "Creando relaciones en las Lecciones... ";
 
-        for (SharableContentObject scoData : arrLec) {
+        for (Entry<String, SharableContentObject> entryscoData : arrLec.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
             if (scoData.isRelationed()) {
                 Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
             } else {
@@ -217,7 +287,8 @@ public class MetadataParser implements Runnable {
                 boolean bulPadre = false;
 
                 int cont = 0;
-                for (SharableContentObject scoSCO : arrLvl) {
+                for (Entry<String, SharableContentObject> entryscoSCO : arrLvl.entrySet()) {
+                    SharableContentObject scoSCO = entryscoSCO.getValue();
                     if (scoData.getStrID().contains(scoSCO.getStrID())) {
                         bulPadre = true;
                         cont++;
@@ -226,22 +297,15 @@ public class MetadataParser implements Runnable {
                     }
                 }
 
-                if (bulPadre) {
+                if (bulPadre || isIgnoreFather) {
                     cont = 0;
-                    for (SharableContentObject scoSCO : arrObj) {
+                    for (Entry<String, SharableContentObject> entryscoSCO : arrObj.entrySet()) {
+                        SharableContentObject scoSCO = entryscoSCO.getValue();
                         if (scoSCO.getStrID().contains(scoData.getStrID())) {
                             cont++;
                             Log(strMessage2 + cont + " Está compuesto por \t" + scoSCO.getStrID());
                             scoData.SetRelation(scoSCO, "Está compuesto por");
                         }
-                    }
-                    try {
-                        Log("Guardando cambios... \t" + scoData.getStrID());
-                        scoData.SaveChanges();
-                    } catch (IOException | TransformerException ex) {
-                        Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
-                        JOptionPane.showMessageDialog(null, ex);
-                        System.exit(6);
                     }
                 } else {
                     Log("No fué identificado el padre... relaciones abortadas: " + scoData.getStrID());
@@ -251,30 +315,100 @@ public class MetadataParser implements Runnable {
 
         strMessage = "Creando relaciones en los niveles... ";
 
-        for (SharableContentObject scoData : arrLvl) {
+        for (Entry<String, SharableContentObject> entryscoData : arrLvl.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
             if (scoData.isRelationed()) {
                 Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
             } else {
                 Log(strMessage + scoData.getStrID());
 
                 int cont = 0;
-                for (SharableContentObject scoSCO : arrLec) {
+                for (Entry<String, SharableContentObject> entryscoSCO : arrLec.entrySet()) {
+                    SharableContentObject scoSCO = entryscoSCO.getValue();
                     if (scoSCO.getStrID().contains(scoData.getStrID())) {
                         cont++;
                         Log(strMessage2 + cont + " Está compuesto por \t" + scoSCO.getStrID());
                         scoData.SetRelation(scoSCO, "Está compuesto por");
                     }
                 }
+
+            }
+        }
+        //</editor-fold>
+
+        strMessage = "Guardando cambios... \t";
+        strMessage2 = "NO HAY CAMBIOS... \t";
+
+        //<editor-fold defaultstate="collapsed" desc="Saving changes...">
+        for (Entry<String, SharableContentObject> entryscoData : arrLvl.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
+
+            if (scoData.getIsChanged()) {
                 try {
-                    Log("Guardando cambios... \t" + scoData.getStrID());
+                    Log(strMessage + scoData.getStrID());
                     scoData.SaveChanges();
                 } catch (IOException | TransformerException ex) {
                     Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, ex);
                     System.exit(6);
                 }
+            }else{
+                Log(strMessage2 + scoData.getStrID());
+            }
+
+        }
+
+        for (Entry<String, SharableContentObject> entryscoData : arrLec.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
+
+            if (scoData.getIsChanged()) {
+                try {
+                    Log(strMessage + scoData.getStrID());
+                    scoData.SaveChanges();
+                } catch (IOException | TransformerException ex) {
+                    Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex);
+                    System.exit(6);
+                }
+            }else{
+                Log(strMessage2 + scoData.getStrID());
             }
         }
+
+        for (Entry<String, SharableContentObject> entryscoData : arrObj.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
+
+            if (scoData.getIsChanged()) {
+                try {
+                    Log(strMessage + scoData.getStrID());
+                    scoData.SaveChanges();
+                } catch (IOException | TransformerException ex) {
+                    Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex);
+                    System.exit(6);
+                }
+            }else{
+                Log(strMessage2 + scoData.getStrID());
+            }
+        }
+
+        for (Entry<String, SharableContentObject> entryscoData : arrRec.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
+
+            if (scoData.getIsChanged()) {
+                try {
+                    Log(strMessage + scoData.getStrID());
+                    scoData.SaveChanges();
+                } catch (IOException | TransformerException ex) {
+                    Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex);
+                    System.exit(6);
+                }
+            }else{
+                Log(strMessage2 + scoData.getStrID());
+            }
+        }
+        //</editor-fold>
 
         this.newLog.close();
         JOptionPane.showMessageDialog(null, "Terminado exitosamente", "Mensaje", 1);
@@ -288,7 +422,7 @@ public class MetadataParser implements Runnable {
         }
 
         try {
-            this.newLog.println(strLog);
+            this.newLog.println(timeStamp + " - " + strLog);
         } catch (NullPointerException ex) {
             Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
         }

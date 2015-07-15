@@ -20,14 +20,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public final class ExcelReader {
 
-    private String strUri = null;
     private XSSFSheet xssActualSheet = null;
     private XSSFWorkbook xssActualBook = null;
+    
+    String strPath;
+    String strName;
+    File fileData = null;
 
     /**
      *  Arreglo de hojas leídas de un libro de excel
      */
-    public ArrayList<String> arrSheetNames = null;
+    private ArrayList<String> arrSheetNames = null;
     
     /**
      *  Constructor del lector. Define automáticamente el nombre de las hojas y 
@@ -35,10 +38,28 @@ public final class ExcelReader {
      * @param strUri
      * @throws IOException
      */
-    public ExcelReader(String strUri) throws IOException {
-        this.strUri = strUri;
+    public ExcelReader(File fileData) throws IOException {
+        this.strPath = fileData.getParent();
+        this.strName = fileData.getName();
+        this.fileData = fileData;
         ReadFile();
         getArrSheetNames();
+    }
+
+    public XSSFWorkbook getXssActualBook() {
+        return xssActualBook;
+    }
+
+    public String getStrPath() {
+        return strPath;
+    }
+
+    public String getStrName() {
+        return strName;
+    }
+
+    public File getFileData() {
+        return fileData;
     }
 
     /**
@@ -56,14 +77,6 @@ public final class ExcelReader {
         }
 
         return this.arrSheetNames;
-    }
-
-    /**
-     *
-     * @return Regresa el String de dirección de donde fué leído el libro
-     */
-    public String getStrUri() {
-        return strUri;
     }
 
     /**
@@ -90,7 +103,6 @@ public final class ExcelReader {
             Row row = rowIterator.next();
             //For each row, iterate through all the columns
             Iterator<Cell> cellIterator = row.cellIterator();
-            int position = 0;
 
             String objKey = "";
             ArrayList<String> objValue = new ArrayList();
@@ -118,8 +130,6 @@ public final class ExcelReader {
                 } else {
                     objValue.add(objTemp);
                 }
-
-                position++;
             }
 
             if (!objKey.isEmpty() && !objValue.isEmpty()) {
@@ -133,7 +143,7 @@ public final class ExcelReader {
     }
 
     private void ReadFile() throws FileNotFoundException, IOException {
-        FileInputStream file = new FileInputStream(new File(this.strUri));
+        FileInputStream file = new FileInputStream(fileData);
         //Create Workbook instance holding reference to .xlsx file
         this.xssActualBook = new XSSFWorkbook(file);
         file.close();
@@ -166,7 +176,7 @@ public final class ExcelReader {
      */
     public void ReadnShowFile() {
         try {
-            FileInputStream file = new FileInputStream(new File(this.strUri));
+            FileInputStream file = new FileInputStream(fileData);
 
             //Create Workbook instance holding reference to .xlsx file
             XSSFWorkbook workbook = new XSSFWorkbook(file);

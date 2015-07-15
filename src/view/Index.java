@@ -5,20 +5,10 @@
  */
 package view;
 
-import bin.MetadataParser;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.xml.sax.SAXException;
+import java.io.PrintStream;
+import javax.swing.JButton;
 import utiility.AccionesVentana;
-
+import utiility.JFolderChooser;
 
 /**
  *
@@ -26,34 +16,29 @@ import utiility.AccionesVentana;
  */
 public class Index extends javax.swing.JFrame {
 
-    AccionesVentana nuevo;
-    MetadataParser mParser = new MetadataParser();
-
     /**
      * Creates new form Index
      */
+    AccionesVentana nuevo;
+    String strRoot = System.getProperty("user.dir");
+    JFolderChooser chooser;
+    java.util.ArrayList<String> fileList;
+
     public Index() {
         AccionesVentana.LooknFeel();
         initComponents();
-        nuevo = new AccionesVentana(this, "XML Data Generator");
+        this.nuevo = new AccionesVentana(this, "eFixer");
+        PrintStream con = new PrintStream(new utiility.TextAreaOutputStream(this.txtConsole, 400));
+        System.setOut(con);
+    }
 
-        /*try {
-            mParser.ReadMetadataBase();
-        } catch (ParserConfigurationException | SAXException | TransformerException | IOException ex) {
-            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Metadata Base is Broken or Missing", "ERROR", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
-
+    private void SearchingFolder() {
         try {
-            txtSearch.setText(System.getProperty("user.dir").concat(File.separator + "formato metadatos.xlsx"));
-            mParser.ReadObject(txtSearch.getText());
-        } catch (IOException ex) {
-            txtSearch.setText("");
+            this.txtFolderProyect.setText(this.chooser.getStrPath());
+            this.btnRead.setEnabled(true);
+        } catch (Exception ex) {
+            this.btnRead.setEnabled(false);
         }
-
-        txtXmlData.setText(System.getProperty("user.dir").concat(File.separator + "Generated_metadata"));
-*/
     }
 
     /**
@@ -65,111 +50,254 @@ public class Index extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        pnlExcel = new javax.swing.JPanel();
-        btnSearchExcel = new javax.swing.JButton();
-        txtSearch = new javax.swing.JTextField();
-        btnGenerate = new javax.swing.JButton();
-        pnlXML = new javax.swing.JPanel();
-        btnSearchMeta = new javax.swing.JButton();
-        txtXmlData = new javax.swing.JTextField();
-        btnCreate = new javax.swing.JButton();
+        pnlFolder = new javax.swing.JPanel();
+        btnSearch = new javax.swing.JButton();
+        txtFolderProyect = new javax.swing.JTextField();
+        btnRead = new javax.swing.JButton();
+        btnFix = new javax.swing.JButton();
+        lblMessage = new javax.swing.JLabel();
+        tbbData = new javax.swing.JTabbedPane();
+        pnlData = new javax.swing.JScrollPane();
+        tblData = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtConsole = new javax.swing.JTextArea();
+        jPanel2 = new javax.swing.JPanel();
+        chkCopyAll = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Excel Data");
-        setResizable(false);
 
-        pnlExcel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 204, 0)), "Excel Data"));
-        pnlExcel.setToolTipText("Excel data");
-        pnlExcel.setName("Excel"); // NOI18N
+        pnlFolder.setBorder(javax.swing.BorderFactory.createTitledBorder("Object Folder"));
 
-        btnSearchExcel.setText("Search");
-        btnSearchExcel.addActionListener(new java.awt.event.ActionListener() {
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchExcelActionPerformed(evt);
+                btnSearchActionPerformed(evt);
             }
         });
 
-        txtSearch.setEditable(false);
-        txtSearch.setBackground(new java.awt.Color(255, 255, 255));
-        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+        txtFolderProyect.setEditable(false);
+        txtFolderProyect.setBackground(new java.awt.Color(255, 255, 255));
+        txtFolderProyect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSearchActionPerformed(evt);
+                txtFolderProyectActionPerformed(evt);
             }
         });
 
-        btnGenerate.setText("Generate");
-        btnGenerate.addActionListener(new java.awt.event.ActionListener() {
+        btnRead.setText("Read");
+        btnRead.setEnabled(false);
+        btnRead.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGenerateActionPerformed(evt);
+                btnReadActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout pnlExcelLayout = new javax.swing.GroupLayout(pnlExcel);
-        pnlExcel.setLayout(pnlExcelLayout);
-        pnlExcelLayout.setHorizontalGroup(
-            pnlExcelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlExcelLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlFolderLayout = new javax.swing.GroupLayout(pnlFolder);
+        pnlFolder.setLayout(pnlFolderLayout);
+        pnlFolderLayout.setHorizontalGroup(
+            pnlFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFolderLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnSearchExcel)
+                .addComponent(btnSearch)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtSearch)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnGenerate, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtFolderProyect)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRead)
                 .addContainerGap())
         );
-        pnlExcelLayout.setVerticalGroup(
-            pnlExcelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlExcelLayout.createSequentialGroup()
+        pnlFolderLayout.setVerticalGroup(
+            pnlFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFolderLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnlExcelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSearchExcel)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGenerate))
+                .addGroup(pnlFolderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSearch)
+                    .addComponent(txtFolderProyect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRead))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        pnlXML.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 0)), "XML Metadata Folder"));
-
-        btnSearchMeta.setText("Search");
-        btnSearchMeta.addActionListener(new java.awt.event.ActionListener() {
+        btnFix.setText("Fix!");
+        btnFix.setEnabled(false);
+        btnFix.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchMetaActionPerformed(evt);
+                btnFixActionPerformed(evt);
             }
         });
 
-        txtXmlData.setEditable(false);
-        txtXmlData.setBackground(new java.awt.Color(255, 255, 255));
+        lblMessage.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lblMessage.setForeground(new java.awt.Color(255, 0, 0));
 
-        btnCreate.setText("Create");
-        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+        tblData.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null},
+                {null}
+            },
+            new String [] {
+                "FILES"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        pnlData.setViewportView(tblData);
+
+        tbbData.addTab("File List", pnlData);
+
+        txtConsole.setBackground(new java.awt.Color(0, 153, 153));
+        txtConsole.setColumns(20);
+        txtConsole.setForeground(new java.awt.Color(0, 255, 51));
+        txtConsole.setRows(5);
+        jScrollPane1.setViewportView(txtConsole);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+        );
+
+        tbbData.addTab("Console", jPanel1);
+
+        chkCopyAll.setSelected(true);
+        chkCopyAll.setText("Copy data to \"eFixer\" Folder");
+        chkCopyAll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateActionPerformed(evt);
+                chkCopyAllActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout pnlXMLLayout = new javax.swing.GroupLayout(pnlXML);
-        pnlXML.setLayout(pnlXMLLayout);
-        pnlXMLLayout.setHorizontalGroup(
-            pnlXMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlXMLLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnSearchMeta)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtXmlData, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(chkCopyAll)
+                .addContainerGap(334, Short.MAX_VALUE))
         );
-        pnlXMLLayout.setVerticalGroup(
-            pnlXMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlXMLLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(pnlXMLLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtXmlData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearchMeta)
-                    .addComponent(btnCreate))
-                .addContainerGap())
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(chkCopyAll)
+                .addContainerGap(220, Short.MAX_VALUE))
         );
+
+        tbbData.addTab("Options", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -178,85 +306,110 @@ public class Index extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlXML, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlExcel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(406, 406, 406)
+                        .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnFix))
+                    .addComponent(tbbData)
+                    .addComponent(pnlFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pnlExcel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlFolder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tbbData, javax.swing.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pnlXML, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnFix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
-
-        pnlExcel.getAccessibleContext().setAccessibleName("Excel");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        this.chooser = new JFolderChooser();
+        this.chooser.OpenChooser("");
+        SearchingFolder();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void txtFolderProyectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFolderProyectActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchActionPerformed
+    }//GEN-LAST:event_txtFolderProyectActionPerformed
 
-    private void btnSearchExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchExcelActionPerformed
-        JFileChooser jchus = new JFileChooser();
-        jchus.setFileFilter(new FileNameExtensionFilter("List files", "xls", "xlsx", "csv"));
-        jchus.showDialog(this, null);
-        try {
-            txtSearch.setText(jchus.getSelectedFile().getAbsolutePath());
-        } catch (Exception ex) {
-            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+    private void btnReadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReadActionPerformed
+        java.io.File file = new java.io.File(this.txtFolderProyect.getText());
+
+        String DriveDesc = utiility.FilesUtility.PathRootDesc(file.getPath());
+        System.out.println(DriveDesc);
+
+        if (!DriveDesc.toLowerCase().contains("disco local")) {
+            javax.swing.JOptionPane.showMessageDialog(null, "El proceso debe realizarse en un disco local");
+
+            return;
         }
 
-    }//GEN-LAST:event_btnSearchExcelActionPerformed
+        this.fileList = this.chooser.getFileList(false);
 
-    private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
-        /**try {
-            mParser = new MetadataParser();
-            mParser.ReadObject(txtSearch.getText());
-        } catch (IOException ex) {
-            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-    }//GEN-LAST:event_btnGenerateActionPerformed
+        javax.swing.table.TableModel model = this.tblData.getModel();
 
-    private void btnSearchMetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchMetaActionPerformed
-        JFileChooser chooser = new JFileChooser();
+        java.util.Iterator<String> ite = this.fileList.iterator();
+        int cont = 0;
 
-        chooser.setCurrentDirectory(new java.io.File("."));
-        //chooser.setDialogTitle(choosertitle);
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        //
-        // disable the "All files" option.
-        //
-        chooser.setAcceptAllFileFilterUsed(false);
-        //    
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): "
-                    + chooser.getCurrentDirectory());
-            System.out.println("getSelectedFile() : "
-                    + chooser.getSelectedFile());
-        } else {
-            System.out.println("No Selection ");
+        while (ite.hasNext()) {
+            String ele = (String) ite.next();
+            model.setValueAt(ele, cont, 0);
+            cont++;
         }
 
-        try {
-            txtXmlData.setText(chooser.getSelectedFile().getAbsolutePath());
-        } catch (Exception ex) {
-            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+        this.pnlFolder.setEnabled(false);
+        this.btnRead.setEnabled(false);
+        this.btnSearch.setEnabled(false);
+
+        this.btnFix.setEnabled(true);
+    }//GEN-LAST:event_btnReadActionPerformed
+
+    private void btnFixActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFixActionPerformed
+        this.btnFix.setEnabled(false);
+
+        String strPath = this.txtFolderProyect.getText();
+
+        if (!this.chkCopyAll.isSelected()) {
+            String strMessaje = "¿Seguro que desea SOBREESCRIBIR los archivos originales?\n(Una vez iniciado el proceso los archivos orignales serán irrecuperables)";
+
+            int showConfirmDialog = javax.swing.JOptionPane.showConfirmDialog(this.rootPane, strMessaje);
+
+            switch (showConfirmDialog) {
+                case 1:
+                    this.chkCopyAll.setSelected(true);
+                    break;
+                case 0:
+                    this.chkCopyAll.setSelected(false);
+                    break;
+                default:
+                    this.btnFix.setEnabled(true);
+                    return;
+            }
         }
-    }//GEN-LAST:event_btnSearchMetaActionPerformed
 
-    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        this.lblMessage.setText("Trabajando...");
 
-        /*try {
-            mParser.CreateXMLFull(txtXmlData.getText());
-        } catch (TransformerException | IOException | ParserConfigurationException | SAXException ex) {
-            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-    }//GEN-LAST:event_btnCreateActionPerformed
+        Object[] objParams = {strPath, this.lblMessage, Boolean.valueOf(this.chkCopyAll.isSelected()), true};
+
+        this.tbbData.setSelectedIndex(1);
+
+        Thread main = new Thread(new bin.MetadataParser(objParams));
+        main.start();
+    }//GEN-LAST:event_btnFixActionPerformed
+
+    private void chkCopyAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkCopyAllActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkCopyAllActionPerformed
 
     /**
      * @param args the command line arguments
@@ -274,11 +427,15 @@ public class Index extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Index.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Index.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Index.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Index.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
         //</editor-fold>
 
         /* Create and display the form */
@@ -290,13 +447,19 @@ public class Index extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCreate;
-    private javax.swing.JButton btnGenerate;
-    private javax.swing.JButton btnSearchExcel;
-    private javax.swing.JButton btnSearchMeta;
-    private javax.swing.JPanel pnlExcel;
-    private javax.swing.JPanel pnlXML;
-    private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtXmlData;
+    private javax.swing.JButton btnFix;
+    private javax.swing.JButton btnRead;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JCheckBox chkCopyAll;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblMessage;
+    private javax.swing.JScrollPane pnlData;
+    private javax.swing.JPanel pnlFolder;
+    private javax.swing.JTabbedPane tbbData;
+    private javax.swing.JTable tblData;
+    private javax.swing.JTextArea txtConsole;
+    private javax.swing.JTextField txtFolderProyect;
     // End of variables declaration//GEN-END:variables
 }

@@ -23,6 +23,8 @@ public class SharableContentObject {
     Document docXML;
     Node ndRelation;
     HashMap<String, String> arrRelations = new HashMap();
+    
+    Boolean isChanged = false;
 
     ArrayList<SharableContentObject> objElements = new ArrayList();
 
@@ -36,6 +38,7 @@ public class SharableContentObject {
 
     public void setStrType(String strType) {
         this.strType = strType;
+        isChanged = true;
     }
 
     public String getStrNombre() {
@@ -43,6 +46,7 @@ public class SharableContentObject {
     }
 
     public void setStrNombre(String strNombre) {
+        isChanged = true;
         this.strNombre = strNombre;
     }
 
@@ -51,6 +55,8 @@ public class SharableContentObject {
     }
 
     public void setStrID(String strID) {
+        isChanged = true;
+        this.strType = GetType(strID);
         this.strID = strID;
     }
 
@@ -59,6 +65,7 @@ public class SharableContentObject {
     }
 
     public void setStrDesc(String strDesc) {
+        isChanged = true;
         this.strDesc = strDesc;
     }
 
@@ -66,11 +73,26 @@ public class SharableContentObject {
         return this.docXML;
     }
 
-    public static String GetType(SharableContentObject scoData) throws NullPointerException {
-        String strID1 = scoData.getStrID();
-        String strResp = "";
+    public void setDocXML(Document docXML) {
+        isChanged = true;
+        this.docXML = (Document) docXML.cloneNode(true);
+    }
 
-        if (strID1.contains("re")) {
+    public Boolean getIsChanged() {
+        return isChanged;
+    }
+
+    public void setIsChanged(Boolean isChanged) {
+        this.isChanged = isChanged;
+    }
+
+    public static String GetType(String strID1) throws NullPointerException {
+        //String strID1 = scoData.getStrID();
+        String strResp;
+
+        if(strID1.isEmpty()){
+            strResp = "Vacio".toUpperCase();
+        }else if (strID1.contains("re")) {
             strResp = "Recurso".toUpperCase();
         } else if (strID1.contains("ob")) {
             strResp = "Objeto".toUpperCase();
@@ -109,7 +131,7 @@ public class SharableContentObject {
         this.strID = XMLUtility.ReadNode(list, new ArrayList(Arrays.asList(new String[]{"general", "identifier", "catalog"})));
         this.strNombre = XMLUtility.ReadNode(list, new ArrayList(Arrays.asList(new String[]{"general", "title"})));
         this.strDesc = XMLUtility.ReadNode(list, new ArrayList(Arrays.asList(new String[]{"general", "description"})));
-        this.strType = GetType(this);
+        this.strType = GetType(this.getStrID());
     }
 
     public boolean isRelationed() {
@@ -124,6 +146,7 @@ public class SharableContentObject {
     }
 
     public void SetRelation(SharableContentObject scoObjeto, String strKind) {
+        isChanged = true;
         Node ndData = this.ndRelation.cloneNode(true);
         NodeList ndListTemp = ndData.getChildNodes();
         ndListTemp = XMLUtility.ChangeNode(ndListTemp, new ArrayList(Arrays.asList(new String[]{"kind"})), strKind);
@@ -135,6 +158,7 @@ public class SharableContentObject {
     }
 
     public void SaveChanges() throws IOException, TransformerException {
+        isChanged = false;
         this.eleData.WriteFinish(this.docXML);
     }
 }
