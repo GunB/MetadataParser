@@ -64,6 +64,7 @@ public class Index extends javax.swing.JFrame {
         txtConsole = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         chkCopyAll = new javax.swing.JCheckBox();
+        chkIgnireFather = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -280,21 +281,33 @@ public class Index extends javax.swing.JFrame {
             }
         });
 
+        chkIgnireFather.setSelected(true);
+        chkIgnireFather.setText("Ignore father to create relations from Children (\"Esta compuesto por\")");
+        chkIgnireFather.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkIgnireFatherActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(chkCopyAll)
-                .addContainerGap(334, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(chkCopyAll)
+                    .addComponent(chkIgnireFather))
+                .addContainerGap(134, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(chkCopyAll)
-                .addContainerGap(220, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(chkIgnireFather)
+                .addContainerGap(194, Short.MAX_VALUE))
         );
 
         tbbData.addTab("Options", jPanel2);
@@ -311,7 +324,7 @@ public class Index extends javax.swing.JFrame {
                         .addComponent(lblMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnFix))
-                    .addComponent(tbbData)
+                    .addComponent(tbbData, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
                     .addComponent(pnlFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -399,7 +412,8 @@ public class Index extends javax.swing.JFrame {
 
         this.lblMessage.setText("Trabajando...");
 
-        Object[] objParams = {strPath, this.lblMessage, Boolean.valueOf(this.chkCopyAll.isSelected()), true};
+        Object[] objParams = {strPath, this.lblMessage,this.chkCopyAll.isSelected(), 
+            chkIgnireFather.isSelected()};
 
         this.tbbData.setSelectedIndex(1);
 
@@ -410,6 +424,10 @@ public class Index extends javax.swing.JFrame {
     private void chkCopyAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkCopyAllActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkCopyAllActionPerformed
+
+    private void chkIgnireFatherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkIgnireFatherActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkIgnireFatherActionPerformed
 
     /**
      * @param args the command line arguments
@@ -451,6 +469,7 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JButton btnRead;
     private javax.swing.JButton btnSearch;
     private javax.swing.JCheckBox chkCopyAll;
+    private javax.swing.JCheckBox chkIgnireFather;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
