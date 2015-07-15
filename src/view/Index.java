@@ -37,7 +37,7 @@ public class Index extends javax.swing.JFrame {
         initComponents();
         nuevo = new AccionesVentana(this, "XML Data Generator");
 
-        try {
+        /*try {
             mParser.ReadMetadataBase();
         } catch (ParserConfigurationException | SAXException | TransformerException | IOException ex) {
             Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
@@ -53,7 +53,7 @@ public class Index extends javax.swing.JFrame {
         }
 
         txtXmlData.setText(System.getProperty("user.dir").concat(File.separator + "Generated_metadata"));
-
+*/
     }
 
     /**
@@ -214,12 +214,12 @@ public class Index extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchExcelActionPerformed
 
     private void btnGenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateActionPerformed
-        try {
+        /**try {
             mParser = new MetadataParser();
             mParser.ReadObject(txtSearch.getText());
         } catch (IOException ex) {
             Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }//GEN-LAST:event_btnGenerateActionPerformed
 
     private void btnSearchMetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchMetaActionPerformed
@@ -251,11 +251,11 @@ public class Index extends javax.swing.JFrame {
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
 
-        try {
+        /*try {
             mParser.CreateXMLFull(txtXmlData.getText());
         } catch (TransformerException | IOException | ParserConfigurationException | SAXException ex) {
             Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }//GEN-LAST:event_btnCreateActionPerformed
 
     /**

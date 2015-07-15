@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author hangarita
- */
 public class XMLTag {
 
     String strName;
@@ -21,7 +12,7 @@ public class XMLTag {
     }
 
     public String getStrName() {
-        return strName;
+        return this.strName;
     }
 
     public void setStrName(String strName) {
@@ -29,7 +20,7 @@ public class XMLTag {
     }
 
     public ArrayList<String> getArrAttr() {
-        return arrAttr;
+        return this.arrAttr;
     }
 
     public void setArrAttr(ArrayList<String> arrAttr) {

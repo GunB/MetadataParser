@@ -1,364 +1,311 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bin;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import model.Leccion;
-import model.Objeto;
-import model.Recurso;
-import model.XMLTag;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import model.SharableContentObject;
 import org.xml.sax.SAXException;
+import utiility.ExcelReader;
+import utiility.FilesUtility;
+import utiility.JFolderChooser;
 
-/**
- *
- * @author hangarita
- */
-public class MetadataParser {
+public class MetadataParser implements Runnable {
 
-    ExcelReader xlsRead;
-    HashMap<String, HashMap> jConfig;
-    public Leccion lecData;
-    private Document xmlMetaBase = null;
-    Node ndRelacion = null;
+    private boolean isCopy = true;
+    private String strPath;
+    private JLabel lblData = null;
 
-    public Document xmlMetaActual;
-    File fXmlFile;
+    PrintWriter newLog;
+    String strNameLog = "READLOG";
 
-    public void ReadingConfig() throws IOException {
-        //String strUrl = System.getProperty("user.dir").concat("\\config.json");
-        //System.out.println(strUrl);
-        //File f = new File(strUrl);
-        //this.jConfig = new Gson().fromJson(new FileReader(f).toString(), HashMap.class);
-        //System.out.println(jObject);
+    long unixTime = System.currentTimeMillis() / 1000L;
+    String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(Calendar.getInstance().getTime());
+
+    public MetadataParser(Object params) {
+        Object[] objData = (Object[]) params;
+
+        this.isCopy = ((Boolean) objData[0]).booleanValue();
+        this.strPath = ((String) objData[1]);
+        this.lblData = ((JLabel) objData[2]);
     }
 
-    public void ReadMetadataBase() throws ParserConfigurationException, SAXException, IOException, TransformerException {
-        if (xmlMetaBase == null) {
-
-            String strUrl = System.getProperty("user.dir").concat(File.separator + "metadata.xml");
-            System.out.println(strUrl);
-            fXmlFile = new File(strUrl);
-
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(fXmlFile);
-
-            //optional, but recommended
-            //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
-            doc.getDocumentElement().normalize();
-
-            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-            //this.jConfig = new Gson().fromJson(new FileReader(f).toString(), HashMap.class);
-            //System.out.println(jObject);
-
-            //printDocument(doc, System.out);
-            ndRelacion = doc.getElementsByTagName("relation").item(0);
-            // retrieve the element 'link'
-            Element element = (Element) doc.getElementsByTagName("relation").item(0);
-            // remove the specific node
-            element.getParentNode().removeChild(element);
-
-            xmlMetaBase = doc;
-        }
-        xmlMetaActual = xmlMetaBase;
+    public MetadataParser() {
     }
 
-    public void CreateXMLFull(String strPath) throws TransformerException, IOException, ParserConfigurationException, SAXException {
-        ReadMetadataBase();
-        CreateFullXMLObjeto(strPath, lecData.getObjObjeto());
+    public static void main(String[] args) {
+        new MetadataParser().Exec(args);
+    }
 
-        Iterator<Recurso> arrRecData = lecData.getObjObjeto().getArrRecursos().iterator();
-
-        while (arrRecData.hasNext()) {
-            Recurso recData = arrRecData.next();
-            ReadMetadataBase();
-            CreateFullXMLRecurso(strPath, recData);
+    public void Exec(String[] args) {
+        System.out.println("Program Arguments:");
+        for (String arg : args) {
+            System.out.println("\t" + arg);
         }
 
-    }
+        File baseFileDirectory = new File(args[0]);
 
-    public void CreateFullXMLObjeto(String strPath, Objeto objObjeto) throws TransformerException, TransformerConfigurationException, IOException {
-        Node staff = xmlMetaActual.getElementsByTagName("lom").item(0).cloneNode(true);
-        NodeList list = staff.getChildNodes();
-
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "title")), objObjeto.getStrNombre());
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "description")), objObjeto.getStrDesc());
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "identifier", "catalog")), objObjeto.getStrID());
-
-        String[] arrKeyWords = objObjeto.getArrData().get("keyWord").split(",");
-        list = AddNodeList2Node(list, new ArrayList<>(Arrays.asList("general", "keyword")), arrKeyWords, new XMLTag("li"));
-
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "learningGoal")), objObjeto.getArrData().get("learningGoal"));
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "triggerQuestion")), objObjeto.getArrData().get("triggerQuestion"));
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "pedagogicalAspect")), objObjeto.getArrData().get("pedagogicalAspect"));
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "recommendedUse")), objObjeto.getArrData().get("recommendedUse"));
-
-        Node ndTemp = ndRelacion.cloneNode(true);
-        NodeList ndListTemp = ndTemp.getChildNodes();
-        
-        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("kind")), "Es parte de");
-        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "identifier", "catalog")), lecData.getStrID());
-        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "description")), lecData.getStrDesc());
-        staff.appendChild(ndTemp);
-        
-        Iterator<Recurso> ite = objObjeto.getArrRecursos().iterator();
-        while(ite.hasNext()){
-            Recurso recTemp = ite.next();
-            staff.appendChild(RelationObjetoRecurso(recTemp));
-        }
-        
-        //staff.appendChild(RelationObjetoRecurso())
-        // write the content into xml file
-        lecData.setObjObjeto(objObjeto);
-        SaveChangesXML(strPath + File.separator + objObjeto.getStrID() + File.separator + "metadata.xml", staff);
-    }
-    
-    private Node RelationObjetoRecurso(Recurso recData){
-        Node ndTemp = ndRelacion.cloneNode(true);
-        NodeList ndListTemp = ndTemp.getChildNodes();
-        
-        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("kind")), "Esta compuesto por");
-        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "identifier", "catalog")), recData.getStrID());
-        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "description")), recData.getStrDesc());
-        
-        return ndTemp;
-    }
-
-    public void CreateFullXMLRecurso(String strPath, Recurso recData) throws TransformerException, TransformerConfigurationException, IOException {
-        Node staff = xmlMetaActual.getElementsByTagName("lom").item(0).cloneNode(true);
-        NodeList list = staff.getChildNodes();
-
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "title")), recData.getStrNombre());
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "description")), recData.getStrDesc());
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("general", "identifier", "catalog")), recData.getStrID());
-
-        String[] arrKeyWords = recData.getArrData().get("keyWord").split(",");
-        list = AddNodeList2Node(list, new ArrayList<>(Arrays.asList("general", "keyword")), arrKeyWords, new XMLTag("li"));
-
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "learningGoal")), recData.getArrData().get("learningGoal"));
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "triggerQuestion")), recData.getArrData().get("triggerQuestion"));
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "pedagogicalAspect")), recData.getArrData().get("pedagogicalAspect"));
-        list = ChangeNode(list, new ArrayList<>(Arrays.asList("educational", "description", "recommendedUse")), recData.getArrData().get("recommendedUse"));
-        
-        Node ndTemp = ndRelacion.cloneNode(true);
-        NodeList ndListTemp = ndTemp.getChildNodes();
-        
-        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("kind")), "Es parte de");
-        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "identifier", "catalog")), recData.getObjObjeto().getStrID());
-        ndListTemp = ChangeNode(ndListTemp, new ArrayList<>(Arrays.asList("resource", "description")), recData.getObjObjeto().getStrDesc());
-        
-        staff.appendChild(ndTemp);
-        
-        SaveChangesXML(strPath + File.separator + recData.getStrID() + File.separator + "metadata.xml", staff);
-    }
-
-    public void SaveChangesXML(String strPath, Node ndSave) throws TransformerConfigurationException, TransformerException, IOException {
-        String path = strPath;
-
-        //(use relative path for Unix systems)
-        File f = new File(path);
-        //(works for both Windows and Linux)
-        f.getParentFile().mkdirs();
-        f.createNewFile();
-
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        DOMSource source = new DOMSource(ndSave);
-        StreamResult result = new StreamResult(f);
-        transformer.transform(source, result);
-    }
-
-    private void pruebaPrint() {
+        this.strNameLog = baseFileDirectory.getPath().concat(File.separator).concat(this.strNameLog + "_" + this.unixTime).concat(".txt");
         try {
-            printDocument(xmlMetaActual, System.out);
-        } catch (IOException | TransformerException ex) {
+            this.newLog = new PrintWriter(this.strNameLog, "UTF-8");
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        ArrayList<File> listFilesForFolder = JFolderChooser.listRawFilesForFolder(baseFileDirectory, true);
+
+        Object arrRec = new ArrayList();
+        ArrayList<SharableContentObject> arrObj = new ArrayList();
+        ArrayList<SharableContentObject> arrLec = new ArrayList();
+        ArrayList<SharableContentObject> arrLvl = new ArrayList();
+
+        ArrayList<ExcelReader> arrExcel = new ArrayList();
+
+        String strMessage = "Leyendo SCO(s)... ";
+        String strMessage2 = "REL: ";
+
+        Log(strMessage);
+
+        //<editor-fold defaultstate="collapsed" desc="Reading SCO(s)">
+        for (File strNameFolder : listFilesForFolder) {
+            SharableContentObject scoData = null;
+            
+            if (strNameFolder.getName().endsWith(".zip")) {
+                try {
+                    scoData = new SharableContentObject(new ZipReader(strNameFolder));
+                    
+                    Log(strMessage + scoData.getStrID());
+                } catch (IOException | SAXException | ParserConfigurationException | NullPointerException ex) {
+                    System.err.println("ERROR [NOT METADATA]: " + strNameFolder.getName());
+                    Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            if (strNameFolder.getName().endsWith(".xml")) {
+                try {
+                    scoData = new SharableContentObject(new XMLReader(strNameFolder));
+                    
+                    Log(strMessage + scoData.getStrID());
+                } catch (IOException | SAXException | ParserConfigurationException | NullPointerException ex) {
+                    System.err.println("ERROR [NOT METADATA]: " + strNameFolder.getName());
+                    Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            if (strNameFolder.getName().endsWith(".xls") || strNameFolder.getName().endsWith(".xlsx")) {
+                try {
+                    ExcelReader excelReader = new ExcelReader(strNameFolder.getName());
+                    arrExcel.add(excelReader);
+                    
+                    Log(strMessage + excelReader.getStrUri());
+                } catch (IOException ex) {
+                    System.err.println("ERROR [NOT READABLE]: " + strNameFolder.getName());
+                    Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            try {
+                if ((strNameFolder.getName().endsWith(".xml")) || (strNameFolder.getName().endsWith(".zip"))) {
+                    switch (scoData.getStrType()) {
+                        case "NIVEL":
+                            arrLvl.add(scoData);
+                            break;
+                        case "LECCION":
+                            arrLec.add(scoData);
+                            break;
+                        case "OBJETO":
+                            arrObj.add(scoData);
+                            break;
+                        case "RECURSO":
+                            ((ArrayList) arrRec).add(scoData);
+                    }
+                }
+            } catch (NullPointerException ex) {
+                System.err.println("Failed: " + strNameFolder.getPath());
+                Log("Failed: " + strNameFolder.getPath() + " " + ex);
+                Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+//</editor-fold>
+
+        strMessage = "Creando relaciones en los recursos... ";
+
+        for (SharableContentObject scoData : (ArrayList<SharableContentObject>) arrRec) {
+            if (scoData.isRelationed()) {
+                Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
+            } else {
+                Log(strMessage + scoData.getStrID());
+                int cont = 0;
+                for (SharableContentObject scoSCO : arrObj) {
+                    if (scoData.getStrID().contains(scoSCO.getStrID())) {
+                        cont++;
+                        Log(strMessage2 + cont + " Es parte de \t" + scoSCO.getStrID());
+                        scoData.SetRelation(scoSCO, "Es parte de");
+                    }
+                }
+                try {
+                    Log("Guardando cambios... \t" + scoData.getStrID());
+                    scoData.SaveChanges();
+                } catch (IOException | TransformerException ex) {
+                    Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex);
+                    System.exit(6);
+                }
+            }
+        }
+
+        strMessage = "Creando relaciones en los Objetos... ";
+
+        for (SharableContentObject scoData : arrObj) {
+            if (scoData.isRelationed()) {
+                Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
+            } else {
+                boolean bulPadre = false;
+
+                int cont = 0;
+                for (SharableContentObject scoSCO : arrLec) {
+                    if (scoData.getStrID().contains(scoSCO.getStrID())) {
+                        bulPadre = true;
+                        cont++;
+                        Log(strMessage2 + cont + " Es parte de \t" + scoSCO.getStrID());
+                        scoData.SetRelation(scoSCO, "Es parte de");
+                    }
+                }
+
+                if (bulPadre) {
+                    cont = 0;
+                    Log(strMessage + scoData.getStrID());
+
+                    for (SharableContentObject scoSCO : (ArrayList<SharableContentObject>) arrRec) {
+                        if (scoSCO.getStrID().contains(scoData.getStrID())) {
+                            cont++;
+                            Log(strMessage2 + cont + " Está compuesto por \t" + scoSCO.getStrID());
+                            scoData.SetRelation(scoSCO, "Está compuesto por");
+                        }
+                    }
+                    try {
+                        Log("Guardando cambios... \t" + scoData.getStrID());
+                        scoData.SaveChanges();
+                    } catch (IOException | TransformerException ex) {
+                        Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(null, ex);
+                        System.exit(6);
+                    }
+                } else {
+                    Log("No fué identificado el padre... relaciones abortadas: " + scoData.getStrID());
+                }
+            }
+        }
+
+        strMessage = "Creando relaciones en las Lecciones... ";
+
+        for (SharableContentObject scoData : arrLec) {
+            if (scoData.isRelationed()) {
+                Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
+            } else {
+                Log(strMessage + scoData.getStrID());
+                boolean bulPadre = false;
+
+                int cont = 0;
+                for (SharableContentObject scoSCO : arrLvl) {
+                    if (scoData.getStrID().contains(scoSCO.getStrID())) {
+                        bulPadre = true;
+                        cont++;
+                        Log(strMessage2 + cont + " Es parte de \t" + scoSCO.getStrID());
+                        scoData.SetRelation(scoSCO, "Es parte de");
+                    }
+                }
+
+                if (bulPadre) {
+                    cont = 0;
+                    for (SharableContentObject scoSCO : arrObj) {
+                        if (scoSCO.getStrID().contains(scoData.getStrID())) {
+                            cont++;
+                            Log(strMessage2 + cont + " Está compuesto por \t" + scoSCO.getStrID());
+                            scoData.SetRelation(scoSCO, "Está compuesto por");
+                        }
+                    }
+                    try {
+                        Log("Guardando cambios... \t" + scoData.getStrID());
+                        scoData.SaveChanges();
+                    } catch (IOException | TransformerException ex) {
+                        Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                        JOptionPane.showMessageDialog(null, ex);
+                        System.exit(6);
+                    }
+                } else {
+                    Log("No fué identificado el padre... relaciones abortadas: " + scoData.getStrID());
+                }
+            }
+        }
+
+        strMessage = "Creando relaciones en los niveles... ";
+
+        for (SharableContentObject scoData : arrLvl) {
+            if (scoData.isRelationed()) {
+                Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
+            } else {
+                Log(strMessage + scoData.getStrID());
+
+                int cont = 0;
+                for (SharableContentObject scoSCO : arrLec) {
+                    if (scoSCO.getStrID().contains(scoData.getStrID())) {
+                        cont++;
+                        Log(strMessage2 + cont + " Está compuesto por \t" + scoSCO.getStrID());
+                        scoData.SetRelation(scoSCO, "Está compuesto por");
+                    }
+                }
+                try {
+                    Log("Guardando cambios... \t" + scoData.getStrID());
+                    scoData.SaveChanges();
+                } catch (IOException | TransformerException ex) {
+                    Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(null, ex);
+                    System.exit(6);
+                }
+            }
+        }
+
+        this.newLog.close();
+        JOptionPane.showMessageDialog(null, "Terminado exitosamente", "Mensaje", 1);
+        System.exit(0);
+    }
+
+    private void Log(String strLog) {
+        try {
+            this.lblData.setText(strLog);
+        } catch (NullPointerException localNullPointerException1) {
+        }
+
+        try {
+            this.newLog.println(strLog);
+        } catch (NullPointerException ex) {
             Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private NodeList AddNodeList2Node(NodeList listNode, ArrayList<String> arrStrCompare, String[] arrNewData, XMLTag xmlTag) {
+    @Override
+    public void run() {
+        if (this.isCopy) {
+            File CopyFolder = FilesUtility.CopyFolder(this.strPath);
+            Log("Copiando archivos...");
+            this.strPath = CopyFolder.getPath();
+            String[] strparams = {this.strPath};
 
-        ArrayList<String> arrTempList = arrStrCompare;
-        Iterator<String> iterator = arrTempList.iterator();
-
-        while (iterator.hasNext()) {
-            String strCompare = iterator.next();
-            iterator.remove();
-
-            for (int i = 0; i < listNode.getLength(); i++) {
-                Node node = listNode.item(i);
-                // get the salary element, and update the value
-
-                //System.out.println(node.getNodeName() + " " + strCompare);
-                if (strCompare.equals(node.getNodeName())) {
-
-                    if (iterator.hasNext()) {
-                        node = AddNodeList2Node(node.getChildNodes(), arrTempList, arrNewData, xmlTag).item(0);
-                    } else {
-
-                        for (String s : arrNewData) {
-                            s = s.trim();
-
-                            if (!s.isEmpty()) {
-                                Node item = xmlMetaActual.createElement(xmlTag.getStrName());
-                                item.appendChild(xmlMetaActual.createTextNode(s));
-                                node.appendChild(item);
-                            }
-                        }
-                        //node.setTextContent(strNewValue);
-                    }
-
-                    break;
-                }
-            }
-
+            Exec(strparams);
+        } else {
+            String[] strparams = {this.strPath};
+            Exec(strparams);
         }
-
-        return listNode;
-    }
-
-    private NodeList ChangeNode(NodeList listNode, ArrayList<String> arrStrCompare, String strNewValue) {
-
-        NodeList tempNode = listNode;
-        ArrayList<String> arrTempList = arrStrCompare;
-        Iterator<String> iterator = arrTempList.iterator();
-
-        while (iterator.hasNext()) {
-            String strCompare = iterator.next();
-            iterator.remove();
-
-            for (int i = 0; i < listNode.getLength(); i++) {
-                Node node = listNode.item(i);
-                // get the salary element, and update the value
-
-                //System.out.println(node.getNodeName() + " " + strCompare);
-                if (strCompare.equals(node.getNodeName())) {
-
-                    if (iterator.hasNext()) {
-                        node = ChangeNode(node.getChildNodes(), arrTempList, strNewValue).item(0);
-                    } else {
-                        node.setTextContent(strNewValue);
-                    }
-
-                    break;
-                }
-            }
-
-        }
-
-        return listNode;
-    }
-
-    public static void printDocument(Document doc, OutputStream out) throws IOException, TransformerException {
-        TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer transformer = tf.newTransformer();
-        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-
-        transformer.transform(new DOMSource(doc),
-                new StreamResult(new OutputStreamWriter(out, "UTF-8")));
-    }
-
-    public void ReadObject(String strUrl) throws IOException {
-        xlsRead = new ExcelReader(strUrl);
-
-        XSSFSheet readedSheet = xlsRead.ReadSheetbyId(0);
-        xlsRead.arrSheetNames.remove(0);
-
-        HashMap<String, String> objSheet = ExcelReader.turnSheetToObject(readedSheet);
-
-        lecData = new Leccion(
-                objSheet.get("Título"),
-                objSheet.get("Nomenclatura"),
-                objSheet.get("Descripción")
-        );
-
-        readedSheet = xlsRead.ReadSheetbyId(1);
-        xlsRead.arrSheetNames.remove(0);
-
-        objSheet = ExcelReader.turnSheetToObject(readedSheet);
-
-        Objeto objTemp = new Objeto(
-                objSheet.get("Título"),
-                objSheet.get("Nomenclatura"),
-                objSheet.get("Descripción")
-        );
-        
-        objTemp.setLecLeccion(lecData);
-
-        HashMap<String, String> objData = new HashMap<>();
-
-        objData.put("keyWord", objSheet.get("Palabras Claves"));
-        objData.put("learningGoal", objSheet.get("Objetivo de Aprendizaje\n" + " (Learning Goal)"));
-        objData.put("triggerQuestion", objSheet.get("Pregunta Detonante\n" + "(Trigger Question)"));
-        objData.put("pedagogicalAspect", objSheet.get("Aspectos Pedagógicos \n" + "(Pedagogical Aspects)"));
-        objData.put("recommendedUse", objSheet.get("Sugerencia de Uso\n" + "(Recommended Use)"));
-
-        objTemp.setArrData(objData);
-
-        //lecData.setObjObjeto(objTemp);
-        ArrayList<Recurso> recData = new ArrayList<>();
-
-        for (String strName : xlsRead.arrSheetNames) {
-            readedSheet = xlsRead.ReadSheetbyName(strName);
-            objSheet = ExcelReader.turnSheetToObject(readedSheet);
-            Recurso createRecurso = createRecurso(objSheet, objTemp);
-            recData.add(createRecurso);
-        }
-
-        objTemp.setArrRecursos(recData);
-        lecData.setObjObjeto(objTemp);
-    }
-
-    private Recurso createRecurso(HashMap<String, String> objSheet, Objeto objLeccion) {
-
-        HashMap<String, String> objData = new HashMap<>();
-
-        objData.put("keyWord", objSheet.get("Palabras Claves"));
-        objData.put("learningGoal", objSheet.get("Objetivo de Aprendizaje\n" + " (Learning Goal)"));
-        objData.put("triggerQuestion", objSheet.get("Pregunta Detonante\n" + "(Trigger Question)"));
-        objData.put("pedagogicalAspect", objSheet.get("Aspectos Pedagógicos \n" + "(Pedagogical Aspects)"));
-        objData.put("recommendedUse", objSheet.get("Sugerencia de Uso\n" + "(Recommended Use)"));
-
-        Recurso recTemp = new Recurso(objSheet.get("Título"),
-                objSheet.get("Nomenclatura"),
-                objSheet.get("Descripción"));
-        
-        recTemp.setObjObjeto(objLeccion);
-
-        recTemp.setArrData(objData);
-
-        return recTemp;
     }
 }

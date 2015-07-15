@@ -1,4 +1,4 @@
-package bin;
+package utiility;
 
 import com.google.common.base.Joiner;
 import java.io.File;
