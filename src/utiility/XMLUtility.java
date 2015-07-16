@@ -12,6 +12,7 @@ import java.util.Iterator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -173,6 +174,7 @@ public class XMLUtility {
         transformer.setOutputProperty("method", "xml");
         transformer.setOutputProperty("indent", "yes");
         transformer.setOutputProperty("encoding", "UTF-8");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
         transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(out, "UTF-8")));

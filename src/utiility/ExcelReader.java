@@ -1,17 +1,12 @@
 package utiility;
 
-import com.google.common.base.Joiner;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -136,7 +131,11 @@ public final class ExcelReader {
             }
 
             if (!objKey.isEmpty() && !objValue.isEmpty()) {
-                objSheet.put(objKey, Joiner.on("").join(objValue).trim());
+                String str = "";
+                for(String s: objValue){
+                    str = str.concat(s);
+                }
+                objSheet.put(objKey, str);
             }
 
             //System.out.println("");
