@@ -65,6 +65,8 @@ public class ZipReader
 
         ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(newFile));
         System.out.println("Saving [File]: " + strNewFile);
+        
+        XMLUtility.printDocument(doc, System.out);
 
         for (Enumeration e = this.zipFile.entries(); e.hasMoreElements();) {
             ZipEntry entryIn = new ZipEntry((ZipEntry) e.nextElement());
@@ -82,16 +84,8 @@ public class ZipReader
                 }
             } else {
                 ZipEntry destEntry = new ZipEntry(this.strFile2Change);
-
                 zos.putNextEntry(destEntry);
-
-                InputStream is = XMLUtility.newInputStreamFromDocument(doc);
-
-                byte[] buf = new byte['Ѐ'];
-                int len;
-                while ((len = is.read(buf)) > 0) {
-                    zos.write(buf, 0, len < buf.length ? len : buf.length);
-                }
+                XMLUtility.printDocument(doc, zos);
             }
             zos.closeEntry();
         }
