@@ -41,6 +41,7 @@ public class ZipReader
         System.out.println("File: " + this.zipFile.getName());
     }
 
+    @Override
     public Document Read()
             throws IOException, SAXException, ParserConfigurationException {
         Document doc = null;
@@ -56,6 +57,7 @@ public class ZipReader
         return doc;
     }
 
+    @Override
     public void WriteFinish(Document doc)
             throws IOException, TransformerException {
         String strOldFile = this.strPath.concat(File.separator).concat(this.strName);
@@ -66,7 +68,7 @@ public class ZipReader
         ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(newFile));
         System.out.println("Saving [File]: " + strNewFile);
         
-        XMLUtility.printDocument(doc, System.out);
+        //XMLUtility.printDocument(doc, System.out);
 
         for (Enumeration e = this.zipFile.entries(); e.hasMoreElements();) {
             ZipEntry entryIn = new ZipEntry((ZipEntry) e.nextElement());

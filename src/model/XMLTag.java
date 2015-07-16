@@ -37,15 +37,13 @@ public class XMLTag {
     }
 
     public String returnFullTagData(String strData) {
-        try {
-            return new String( ("<" + this.strName + ">" + strData + "</" + this.strName + ">").getBytes(), "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(XMLTag.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+
+        return new String(("<" + this.strName + ">" + strData + "</" + this.strName + ">").getBytes());
+
+        //return null;
     }
-    
-    public Node returnFullNode(String strData) throws ParserConfigurationException, SAXException, IOException{
+
+    public Node returnFullNode(String strData) throws ParserConfigurationException, SAXException, IOException {
         return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(returnFullTagData(strData).getBytes())).getDocumentElement();
     }
 }
