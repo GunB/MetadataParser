@@ -6,6 +6,7 @@
 package bin;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,14 +65,12 @@ public class ExcelFormat {
     }
 
     private void XmlFormatBase(String strBase) throws ParserConfigurationException, SAXException, IOException {
-        //File fXmlFile = new File(strBase);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        //FileInputStream read = new FileInputStream(fXmlFile);
 
-        //byte fileContent[] = new byte[(int)fXmlFile.length()];
-        //read.read(fileContent);
-        //String s = new String(fileContent, "UTF-8");
+        //FileInputStream in = new FileInputStream(new File(strBase));
+        //doc = dBuilder.parse(in, "UTF-8");
+        
         doc = dBuilder.parse(strBase);
     }
 

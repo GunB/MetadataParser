@@ -1,14 +1,12 @@
 package model;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class XMLTag {
@@ -37,13 +35,12 @@ public class XMLTag {
     }
 
     public String returnFullTagData(String strData) {
-
-        return new String(("<" + this.strName + ">" + strData + "</" + this.strName + ">").getBytes());
-
-        //return null;
+        return "<" + this.strName + ">" + strData + "</" + this.strName + ">";
     }
 
     public Node returnFullNode(String strData) throws ParserConfigurationException, SAXException, IOException {
-        return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(returnFullTagData(strData).getBytes())).getDocumentElement();
+        return DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(new InputSource(new StringReader(returnFullTagData(strData))))
+                .getDocumentElement();
     }
 }

@@ -6,6 +6,9 @@
 package view;
 
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import utiility.AccionesVentana;
 import utiility.JFolderChooser;
@@ -28,7 +31,12 @@ public class Index extends javax.swing.JFrame {
         AccionesVentana.LooknFeel();
         initComponents();
         this.nuevo = new AccionesVentana(this, "e-Parser v2");
-        PrintStream con = new PrintStream(new utiility.TextAreaOutputStream(this.txtConsole, 400));
+        PrintStream con = null;
+        try {
+            con = new PrintStream(new utiility.TextAreaOutputStream(this.txtConsole, 400), true, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.setOut(con);
     }
 

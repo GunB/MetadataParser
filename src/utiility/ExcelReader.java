@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,7 +39,7 @@ public final class ExcelReader {
     /**
      *  Constructor del lector. Define automáticamente el nombre de las hojas y 
      * prepara el programa para tener el objeto excel.
-     * @param strUri
+     * @param fileData
      * @throws IOException
      */
     public ExcelReader(File fileData) throws IOException {
@@ -124,9 +125,8 @@ public final class ExcelReader {
                         break;
                 }
                 
-                //objTemp = Charset.forName("ISO-8859-1").encode(objTemp).toString();
-                
                 objTemp = objTemp.trim();
+                //objTemp = new String(objTemp.getBytes(StandardCharsets.UTF_8));
 
                 if (cell.getColumnIndex() == 0) {
                     objKey = objTemp;

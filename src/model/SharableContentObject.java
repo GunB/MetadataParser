@@ -2,6 +2,7 @@ package model;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -115,9 +116,12 @@ public class SharableContentObject {
         this.docXML.getDocumentElement().normalize();
         System.out.println("Root element :" + this.docXML.getDocumentElement().getNodeName());
 
-        String strNode = "<relation>\n        <kind schema=\"\"/>\n        <resource>\n            <identifier>\n                <catalog catName=\"\" catSource=\"\"/>\n            </identifier>\n            <description lang=\"\"/>\n        </resource>\n</relation>";
+        String strNode = "<relation><kind schema=\"\"/><resource><identifier>"
+                + "<catalog catName=\"\" catSource=\"\"/></identifier><description lang=\"\"/>"
+                + "</resource></relation>";
 
-        this.ndRelation = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(strNode.getBytes())).getDocumentElement();
+        this.ndRelation = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(new ByteArrayInputStream(strNode.getBytes(StandardCharsets.UTF_8))).getDocumentElement();
 
         this.ndRelation.normalize();
 

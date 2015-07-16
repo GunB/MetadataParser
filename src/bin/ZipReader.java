@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -65,7 +66,7 @@ public class ZipReader
         String strNewFile = this.strPath.concat(File.separator).concat(this.strName).concat(this.strNewSufij);
         File newFile = new File(strNewFile);
 
-        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(newFile));
+        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(newFile), StandardCharsets.UTF_8);
         System.out.println("Saving [File]: " + strNewFile);
         
         //XMLUtility.printDocument(doc, System.out);
