@@ -38,9 +38,9 @@ public class MetadataParser implements Runnable {
     public MetadataParser(Object params) {
         Object[] objData = (Object[]) params;
 
-        this.isCopy =           ((Boolean) objData[2]);
-        this.isIgnoreFather =   ((Boolean) objData[3]);
-        
+        this.isCopy = ((Boolean) objData[2]);
+        this.isIgnoreFather = ((Boolean) objData[3]);
+
         this.strPath = ((String) objData[0]);
         this.lblData = ((JLabel) objData[1]);
     }
@@ -161,6 +161,8 @@ public class MetadataParser implements Runnable {
 
         //<editor-fold defaultstate="collapsed" desc="Extra data from Excel">
         for (ExcelFormat reader : arrExcel) {
+            
+            Log(strMessage2 + reader.getName());
 
             for (Entry<String, HashMap<String, String>> entry : reader.getArrObjects().entrySet()) {
                 String key = entry.getKey();
@@ -195,13 +197,15 @@ public class MetadataParser implements Runnable {
                     try {
                         SharableContentObject get = (SharableContentObject) arrActual.get(key);
                         reader.SharableContentObjectCompleter(get);
-                        
+
                         Log(strMessage2 + key);
                     } catch (ParserConfigurationException | SAXException | IOException ex) {
                         Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
                         Log("XML BASE ERROR!!!");
+                        String concat = FilesUtility.strRoot.concat(File.separator).concat("metadata.xml");                        
                         JOptionPane.showMessageDialog(null, "XML BASE ERROR!!!", "Mensaje", JOptionPane.ERROR_MESSAGE);
-                        System.exit(0);
+                        //System.exit(0);
+                        return;
                     }
 
                 } else {
@@ -352,7 +356,7 @@ public class MetadataParser implements Runnable {
                     JOptionPane.showMessageDialog(null, ex);
                     System.exit(6);
                 }
-            }else{
+            } else {
                 Log(strMessage2 + scoData.getStrID());
             }
 
@@ -370,7 +374,7 @@ public class MetadataParser implements Runnable {
                     JOptionPane.showMessageDialog(null, ex);
                     System.exit(6);
                 }
-            }else{
+            } else {
                 Log(strMessage2 + scoData.getStrID());
             }
         }
@@ -387,7 +391,7 @@ public class MetadataParser implements Runnable {
                     JOptionPane.showMessageDialog(null, ex);
                     System.exit(6);
                 }
-            }else{
+            } else {
                 Log(strMessage2 + scoData.getStrID());
             }
         }
@@ -404,7 +408,7 @@ public class MetadataParser implements Runnable {
                     JOptionPane.showMessageDialog(null, ex);
                     System.exit(6);
                 }
-            }else{
+            } else {
                 Log(strMessage2 + scoData.getStrID());
             }
         }

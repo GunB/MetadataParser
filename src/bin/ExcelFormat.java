@@ -6,7 +6,9 @@
 package bin;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,15 +43,19 @@ public class ExcelFormat {
                 {"title", "Título"},
                 {"description", "Descripción"},
                 {"keyword", "Palabras Claves"},
-                {"learningGoal", "Objetivo de Aprendizaje\n" +" (Learning Goal)"},
-                {"triggerQuestion", "Pregunta Detonante\n" +"(Trigger Question)"},
+                {"learningGoal", "Objetivo de Aprendizaje\n" + " (Learning Goal)"},
+                {"triggerQuestion", "Pregunta Detonante\n" + "(Trigger Question)"},
                 {"pedagogicalAspect", "Aspectos Pedagógicos \n" + "(Pedagogical Aspects)"},
-                {"recommendedUse", "Sugerencia de Uso\n" + "(Recommended Use)"},
-            };
+                {"recommendedUse", "Sugerencia de Uso\n" + "(Recommended Use)"},};
+
+    public String getName() {
+        return filExcel.getStrName();
+    }
 
     public ExcelFormat(ExcelReader filExcel) throws ParserConfigurationException, SAXException, IOException {
         this.filExcel = filExcel;
-        XmlFormatBase(FilesUtility.strRoot.concat(File.separator).concat("metadata.xml"));
+        String xmlUrl = FilesUtility.strRoot.concat(File.separator).concat("metadata.xml");
+        XmlFormatBase(xmlUrl);
         ExcelParser();
     }
 
@@ -60,10 +66,15 @@ public class ExcelFormat {
     }
 
     private void XmlFormatBase(String strBase) throws ParserConfigurationException, SAXException, IOException {
-        File fXmlFile = new File(strBase);
+        //File fXmlFile = new File(strBase);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        doc = dBuilder.parse(fXmlFile);
+        //FileInputStream read = new FileInputStream(fXmlFile);
+
+        //byte fileContent[] = new byte[(int)fXmlFile.length()];
+        //read.read(fileContent);
+        //String s = new String(fileContent, "UTF-8");
+        doc = dBuilder.parse(strBase);
     }
 
     private void ExcelParser() {
@@ -80,7 +91,6 @@ public class ExcelFormat {
     }
 
     public Document SharableContentObjectCompleter(SharableContentObject scoSco) throws ParserConfigurationException, SAXException, IOException {
-        String type = SharableContentObject.GetType(scoSco.getStrID());
         Document doc = (Document) this.doc.cloneNode(true);
         Node staff = doc.getElementsByTagName("lom").item(0);
         NodeList list = staff.getChildNodes();
@@ -130,7 +140,7 @@ public class ExcelFormat {
                 }
             }
         }
-        
+
         scoSco.setDocXML(doc);
         return doc;
     }

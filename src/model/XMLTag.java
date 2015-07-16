@@ -2,7 +2,10 @@ package model;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Node;
@@ -34,7 +37,12 @@ public class XMLTag {
     }
 
     public String returnFullTagData(String strData) {
-        return "<" + this.strName + ">" + strData + "</" + this.strName + ">";
+        try {
+            return new String( ("<" + this.strName + ">" + strData + "</" + this.strName + ">").getBytes(), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(XMLTag.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public Node returnFullNode(String strData) throws ParserConfigurationException, SAXException, IOException{
