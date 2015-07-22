@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><lom xmlns="http://ltsc.ieee.org/xsd/LOM">
+    <general>
+        <identifier>
+            <catalog catName="" catSource="">esn1le01</catalog>
+        </identifier>
+        <title lang="" subtitle="">Cambiar por título de la lección</title>
+        <description lang="es">Esta lección "Cambiar por título de la lección", la cual pertenece al nivel "Cambiar por nombre del nivel" de la enseñanza del español como segunda lengua, contiene diez objetos virtuales cuyos resultados de aprendizaje son:
+"copiar aquí los resultados del aprendizaje"
+Además, se proponen las siguientes funciones comunicativas:
+"copiar aquí las funciones comunicativas."</description>
+        <keyword lang=""><li>colocar aquí los títulos del vocabulario.</li></keyword>
+        <structure schema="CEM"/>
+        <aggregationLevel schema="CEM"/>
+    </general>
+    <lifeCycle/>
+    <metaMetadata/>
+    <technical/>
+    <educational>
+        <description>
+            <recommendedUse lang="es">Una lección está compuesta por 10 objetos de aprendizaje que presentan temáticas interelacionadas y basadas en funciones comunicativas concretas. En cada lección se desarrollan distintos aspectos de la lengua como la gramática, el vocabulario, la pronunciación o el español para el trabajo. A su vez, cada objeto de aprendizaje está compuesto por siete recursos digitales que trabajan los mismos aspectos en temáticas específicas. 
+Los siguientes son los aspectos contemplados dentro del currículo para el desarrollo de una lección:
+-La función comunicativa: es la intención del hablante para la producción de un mensaje específico, corresponden con los saberres de proceso en la construcción curricular desarrollada por SENA. 
+-Gramática: hace referencia al estudio de los niveles del la lengua, fonética, fonología, morfosintaxis y semántica respectivamente. Este componente se desarrolla a través de todos los objetos de aprendizaje y se hace más complejo en conformidad con el proceso consecutivo de cada lección. 
+-Vocabulario: Hace referencia al léxico y se desarrolla durante el proceso del curso en conformidad con la funcionalidad y frecuencia de las palabras. Esta sección pretende, además, incluir vocabulario específico para el español de Colombia en términos interculturales, con el objetivo de relflejar en el curso la diversidad lingüística de la nación. 
+-Pronunciación: La pronunciación hace referncia a las formas partículares de la artículación, los rasgos prosódicos y suprasegmentales de las cadenas de habla. El inventario fonológico se centra en las variaciones estrictas de la fonación en el español de colombia. Este componente se desarrolla a través de un objeto de aprendizaje específico en cada lección. 
+-Criterios de evaluación: corresponden con aquellos elementos de los objetos de aprendizaje que son suceptibles de ser evaluados a través de los recursos virtuales establecidos en el SENA.   
+-Evaluación: Se refiere a una evaluación parcial de los aspectos aprendidos a través de los diez objetos de aprendizaje de cada lección. 
+-Evaluiación final: Se refiere a una evaluación más general en la que están incluidos todos los aspectos referidos en las seis u ocho lecciones que incluye el sub-nivel del curso.</recommendedUse>
+            <triggerQuestion lang="es">Una lección contiene aproxidamente 10 preguntas o enunciados detonantes.</triggerQuestion>
+            <pedagogicalAspect lang="es">Funciones comunicativas:
+"copiar aquí las funciones comunicativas"
+Gramática:
+"copiar los aspectos de la columna gramática del sílabo"
+Vocabulario:
+"copiar los aspectos de la columna vocabulario"</pedagogicalAspect>
+            <learningGoal lang="es"/>
+        </description>
+    </educational>
+    <rights/>
+    <classification>
+    </classification>
+</lom>

@@ -1,0 +1,82 @@
+2015-07-22 14-07-15 - Leyendo SCO(s)... 
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob02meta.xlsx
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob01
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob01re1
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob01re2
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob01re3
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob01re4
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob01re5
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob01re6
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob01re7
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob02
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob02re1
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob02re2
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob02re3
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob02re4
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob02re5
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob02re6
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01ob02re7
+2015-07-22 14-07-15 - Leyendo SCO(s)... esn1le01
+2015-07-22 14-07-15 - Interpretando Excel... 
+2015-07-22 14-07-15 - FILL: esn1le01ob02meta.xlsx
+2015-07-22 14-07-15 - FILL: esn1le01ob02re1
+2015-07-22 14-07-15 - FILL: esn1le01ob02re2
+2015-07-22 14-07-15 - FILL: esn1le01
+2015-07-22 14-07-15 - FILL: esn1le01ob02re7
+2015-07-22 14-07-15 - FILL: esn1le01ob02re5
+2015-07-22 14-07-15 - FILL: esn1le01ob02
+2015-07-22 14-07-15 - FILL: esn1le01ob02re6
+2015-07-22 14-07-15 - FILL: esn1le01ob02re3
+2015-07-22 14-07-15 - FILL: esn1le01ob02re4
+2015-07-22 14-07-15 - Creando relaciones en los recursos... 
+2015-07-22 14-07-15 - YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO esn1le01ob01re6
+2015-07-22 14-07-15 - Creando relaciones en los recursos... esn1le01ob02re7
+2015-07-22 14-07-15 - REL: 1 Es parte de 	esn1le01ob02
+2015-07-22 14-07-15 - YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO esn1le01ob01re7
+2015-07-22 14-07-15 - YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO esn1le01ob01re4
+2015-07-22 14-07-15 - Creando relaciones en los recursos... esn1le01ob02re5
+2015-07-22 14-07-15 - REL: 1 Es parte de 	esn1le01ob02
+2015-07-22 14-07-15 - YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO esn1le01ob01re5
+2015-07-22 14-07-15 - Creando relaciones en los recursos... esn1le01ob02re6
+2015-07-22 14-07-15 - REL: 1 Es parte de 	esn1le01ob02
+2015-07-22 14-07-15 - YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO esn1le01ob01re2
+2015-07-22 14-07-15 - Creando relaciones en los recursos... esn1le01ob02re3
+2015-07-22 14-07-15 - REL: 1 Es parte de 	esn1le01ob02
+2015-07-22 14-07-15 - YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO esn1le01ob01re3
+2015-07-22 14-07-15 - Creando relaciones en los recursos... esn1le01ob02re4
+2015-07-22 14-07-15 - REL: 1 Es parte de 	esn1le01ob02
+2015-07-22 14-07-15 - Creando relaciones en los recursos... esn1le01ob02re1
+2015-07-22 14-07-15 - REL: 1 Es parte de 	esn1le01ob02
+2015-07-22 14-07-15 - YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO esn1le01ob01re1
+2015-07-22 14-07-15 - Creando relaciones en los recursos... esn1le01ob02re2
+2015-07-22 14-07-15 - REL: 1 Es parte de 	esn1le01ob02
+2015-07-22 14-07-15 - YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO esn1le01ob01
+2015-07-22 14-07-15 - REL: 1 Es parte de 	esn1le01
+2015-07-22 14-07-15 - Creando relaciones en los Objetos... esn1le01ob02
+2015-07-22 14-07-15 - REL: 1 Está compuesto por 	esn1le01ob02re7
+2015-07-22 14-07-15 - REL: 2 Está compuesto por 	esn1le01ob02re5
+2015-07-22 14-07-15 - REL: 3 Está compuesto por 	esn1le01ob02re6
+2015-07-22 14-07-15 - REL: 4 Está compuesto por 	esn1le01ob02re3
+2015-07-22 14-07-15 - REL: 5 Está compuesto por 	esn1le01ob02re4
+2015-07-22 14-07-15 - REL: 6 Está compuesto por 	esn1le01ob02re1
+2015-07-22 14-07-15 - REL: 7 Está compuesto por 	esn1le01ob02re2
+2015-07-22 14-07-15 - Creando relaciones en las Lecciones... esn1le01
+2015-07-22 14-07-15 - REL: 1 Está compuesto por 	esn1le01ob01
+2015-07-22 14-07-15 - REL: 2 Está compuesto por 	esn1le01ob02
+2015-07-22 14-07-15 - Guardando cambios... 	esn1le01
+2015-07-22 14-07-15 - NO HAY CAMBIOS... 	esn1le01ob01
+2015-07-22 14-07-15 - Guardando cambios... 	esn1le01ob02
+2015-07-22 14-07-15 - NO HAY CAMBIOS... 	esn1le01ob01re6
+2015-07-22 14-07-15 - Guardando cambios... 	esn1le01ob02re7
+2015-07-22 14-07-15 - NO HAY CAMBIOS... 	esn1le01ob01re7
+2015-07-22 14-07-15 - NO HAY CAMBIOS... 	esn1le01ob01re4
+2015-07-22 14-07-15 - Guardando cambios... 	esn1le01ob02re5
+2015-07-22 14-07-15 - NO HAY CAMBIOS... 	esn1le01ob01re5
+2015-07-22 14-07-15 - Guardando cambios... 	esn1le01ob02re6
+2015-07-22 14-07-15 - NO HAY CAMBIOS... 	esn1le01ob01re2
+2015-07-22 14-07-15 - Guardando cambios... 	esn1le01ob02re3
+2015-07-22 14-07-15 - NO HAY CAMBIOS... 	esn1le01ob01re3
+2015-07-22 14-07-15 - Guardando cambios... 	esn1le01ob02re4
+2015-07-22 14-07-15 - Guardando cambios... 	esn1le01ob02re1
+2015-07-22 14-07-15 - NO HAY CAMBIOS... 	esn1le01ob01re1
+2015-07-22 14-07-15 - Guardando cambios... 	esn1le01ob02re2
