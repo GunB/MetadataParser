@@ -170,10 +170,9 @@ public class XMLUtility {
     public static void printDocument(Document doc, OutputStream out) throws IOException, TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
-        transformer.setOutputProperty("omit-xml-declaration", "no");
-        transformer.setOutputProperty("method", "xml");
-        transformer.setOutputProperty("indent", "yes");
-        transformer.setOutputProperty("encoding", "UTF-8");
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+        transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
