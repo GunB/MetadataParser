@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
@@ -224,9 +222,8 @@ public class MetadataParser implements Runnable {
         Log(strMessage);
 
         //<editor-fold defaultstate="collapsed" desc="Rels">
-        SortedSet<String> keys = new TreeSet<>(arrRec.keySet());
-        for (String key : keys) {
-            SharableContentObject scoData = arrRec.get(key);
+        for (Entry<String, SharableContentObject> entryscoData : arrRec.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
             if (scoData.isRelationed()) {
                 Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
             } else {
@@ -246,9 +243,8 @@ public class MetadataParser implements Runnable {
 
         strMessage = "Creando relaciones en los Objetos... ";
 
-        keys = new TreeSet<>(arrObj.keySet());
-        for (String key : keys) {
-            SharableContentObject scoData = arrObj.get(key);
+        for (Entry<String, SharableContentObject> entryscoData : arrObj.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
             if (scoData.isRelationed()) {
                 Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
             } else {
@@ -286,9 +282,8 @@ public class MetadataParser implements Runnable {
 
         strMessage = "Creando relaciones en las Lecciones... ";
 
-        keys = new TreeSet<>(arrLec.keySet());
-        for (String key : keys) {
-            SharableContentObject scoData = arrLec.get(key);
+        for (Entry<String, SharableContentObject> entryscoData : arrLec.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
             if (scoData.isRelationed()) {
                 Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
             } else {
@@ -324,9 +319,8 @@ public class MetadataParser implements Runnable {
 
         strMessage = "Creando relaciones en los niveles... ";
 
-        keys = new TreeSet<>(arrLvl.keySet());
-        for (String key : keys) {
-            SharableContentObject scoData = arrLvl.get(key);
+        for (Entry<String, SharableContentObject> entryscoData : arrLvl.entrySet()) {
+            SharableContentObject scoData = entryscoData.getValue();
             if (scoData.isRelationed()) {
                 Log("YA SE ENCUENTRA CON RELACIONES, SCO NO ACTUALIZADO " + scoData.getStrID());
             } else {
