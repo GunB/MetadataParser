@@ -28,7 +28,6 @@ import org.xml.sax.SAXException;
 
 public class FilesUtility {
 
-    public static String strRoot = System.getProperty("user.home");
     private static final long unixTime = System.currentTimeMillis() / 1000L;
     private static final String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss").format(Calendar.getInstance().getTime());
     public static final String actualDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());

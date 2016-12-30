@@ -203,7 +203,6 @@ public class MetadataParser implements Runnable {
                     } catch (ParserConfigurationException | SAXException | IOException ex) {
                         Logger.getLogger(MetadataParser.class.getName()).log(Level.SEVERE, null, ex);
                         Log("XML BASE ERROR!!!");
-                        String concat = FilesUtility.strRoot.concat(File.separator).concat("metadata.xml");
                         JOptionPane.showMessageDialog(null, "XML BASE ERROR!!!", "Mensaje", JOptionPane.ERROR_MESSAGE);
                         //System.exit(0);
                         return;
