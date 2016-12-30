@@ -143,5 +143,5 @@
       </plugin>
     </plugins>
   </build>
-    <name>e-ParserIPE</name>
+    <name>e-Parser</name>
 </project>
