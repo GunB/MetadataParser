@@ -52,7 +52,7 @@ public class FilesUtility {
                 + "		<version date=\"" + actualDate + "\">1.0</version>\n"
                 + "		<status>Publicado</status>\n"
                 //<editor-fold defaultstate="collapsed" desc="TODO:Contribuyentes que luego deberán ser leídos">
-                /*
+                
                 + "		<contribute>\n"
                 + "			<role schema=\"CEM\">Productor ejecutivo</role>\n"
                 + "			<entity country=\"CO\" entityForm=\"79786415\" institution=\"eDistribution SAS\" src=\"contacto@edistribution.co\" type=\"Persona\">Díaz Ochoa, Gustavo Andrés</entity>\n"
