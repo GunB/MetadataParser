@@ -199,7 +199,7 @@ public class FilesUtility {
                 + "		</contribute>\n"
                 + "		<contribute>\n"
                 + "			<role schema=\"CEM\">Diseñador gráfico</role>\n"
-                + "			<entity country=\"CO\" entityForm=\"1016049594\" institution=\"eDistribution SAS\" src=\"contacto@edistribution.co\" type=\"Persona\">García Sánchez, Elkin Jair.</entity>\n"
+                + "			<entity country=\"CO\" entityForm=\"1016049594\" institution=\"eDistribution SAS\" src=\"contacto@edistribution.co\" type=\"Persona\">García Sánchez, Elkin Jair</entity>\n"
                 + "			<date>" + actualDate + "</date>\n"
                 + "		</contribute>"
                 //*/
