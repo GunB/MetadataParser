@@ -54,6 +54,7 @@ public class XMLUtility {
 
                     for (String s : arrNewData) {
                         s = s.trim();
+                        s = s.replaceAll("&([^;]+(?!(?:\\w|;)))", "&amp;$1");
 
                         if (!s.isEmpty()) {
                             Node item = xmlTag.returnFullNode(s);
